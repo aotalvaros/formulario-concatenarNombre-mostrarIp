@@ -1,4 +1,5 @@
 
 export interface IEdad {
-   fechaDeNacimiento: number
+    edad: number,
+    error: string
 };
