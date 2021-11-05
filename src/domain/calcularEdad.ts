@@ -1,19 +1,15 @@
 import { IEdad } from "../interface/IEdad";
-import { IFechaValidacion } from "../interface/IFechaValidacion";
 
-export const calcularEdad = (edad: IEdad): IFechaValidacion => {
-    const fecha: Date = new Date();
-    const añoActual: number = fecha.getFullYear();
-    let resultadoEdad: IFechaValidacion ={
-        añoActual: 0,
-        error: ''
-    };
-
-    if (edad.fechaDeNacimiento > añoActual) {
-        resultadoEdad.error = 'Año invalido';
+export const calcularEdad = (fechaNacimiento: Date): IEdad => {
+    const fechaActual = new Date();
+    const anioActual: number = fechaActual.getFullYear();
+    let resultadoEdad: IEdad = {edad: 0, error: ''};
+    
+    if ( fechaNacimiento.getFullYear() > anioActual) {
+       resultadoEdad.error = 'Año invalido';
     } else {
-        resultadoEdad.añoActual = añoActual - edad.fechaDeNacimiento;
+       resultadoEdad.edad = anioActual - fechaNacimiento.getFullYear();
     };
-
+    
     return resultadoEdad;
-}
+};
