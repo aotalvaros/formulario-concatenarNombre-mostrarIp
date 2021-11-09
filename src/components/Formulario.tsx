@@ -1,37 +1,37 @@
-import React, { useState } from 'react'
+import React, { ChangeEventHandler, useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import Swal from 'sweetalert2';
 import { concatenarNombre } from '../domain/concatenarNombre';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { INombre } from '../interface/INombre';
 
 export const Formulario = () => {
 
-    const [obtenerNombre, setObtenerNombre] = useState({
-        primerNombre: '',
-        segundoNombre: '',
-        primerApellido: '',
-        segundoApellido: ''
-    });   
+    const [formulario, setFormulario] = useState<INombre>({
+        primerNombre: "",
+        segundoNombre: "",
+        primerApellido: "",
+        segundoApellido: "",     
+      });
     const [validated, setValidated] = useState<boolean>(false); 
     
-    const handleSubmitForm = (event:any) => {                        
-        const form = event.currentTarget;        
-            if (form.checkValidity() === false) {
-                event.preventDefault();
-                event.stopPropagation();                  
-            };             
-            setValidated(true);                          
+    const handleSubmitForm = (event: any) => {                        
+        event.preventDefault();
+        event.stopPropagation();                  
+        setValidated(true);                                 
+        const form = event.currentTarget; 
+        if (form.checkValidity()) {
+            saludar(formulario);           
         };
-        
-    function actualizarNombre(evento:any) {
-        setObtenerNombre({...obtenerNombre,[evento.target.name]: evento.target.value});         
     };
 
-    const saludar = (): void => {  
-        if (obtenerNombre.primerNombre !== '' && obtenerNombre.primerApellido !== '') {          
-            const nombreConcatenado = concatenarNombre(obtenerNombre);
-            Swal.fire(`Hola ${nombreConcatenado}, su registro fue exitoso, nos vemos en su cumpleaños. ! Felices 33 años ¡`);                      
-        }      
+    const handleOnChange = (event: any) =>{
+        setFormulario({ ...formulario, [event.target.name]: event.target.value });            
+    };
+
+    const saludar = (nombre: INombre): void => {          
+        const nombreConcatenado = concatenarNombre(nombre);
+        Swal.fire(`Hola ${nombreConcatenado}, su registro fue exitoso, nos vemos en su cumpleaños. ! Felices 33 años ¡`);                          
     };
 
     return (  
@@ -45,7 +45,7 @@ export const Formulario = () => {
                     name="primerNombre"
                     type="text"
                     placeholder="Primer Nombre"
-                    onChange={actualizarNombre}                    
+                    onChange={handleOnChange}                  
                 />
                 <Form.Control.Feedback type="invalid">
                     Porfavor ingrese el nombre.
@@ -56,8 +56,8 @@ export const Formulario = () => {
                     id='FormControlSegundoNombre'
                     name='segundoNombre'
                     type="text"
-                    placeholder="Segundo Nombre"    
-                    onChange={actualizarNombre}                
+                    placeholder="Segundo Nombre" 
+                    onChange={handleOnChange}                   
                 />
              </Form.Group>
             </Row>
@@ -70,7 +70,7 @@ export const Formulario = () => {
                     name="primerApellido"
                     type="text"
                     placeholder="Primer apellido"
-                    onChange={actualizarNombre} 
+                    onChange={handleOnChange} 
                 />
              </Form.Group>
              <Form.Group as={Col} md="4" >
@@ -79,7 +79,7 @@ export const Formulario = () => {
                     name="segundoApellido"
                     type="text"
                     placeholder="Segundo apellido"
-                    onChange={actualizarNombre}
+                    onChange={handleOnChange}
                 />
              </Form.Group>
              <Form.Group as={Col} md="4" >
@@ -89,6 +89,7 @@ export const Formulario = () => {
                     name="FechaNacimiento"
                     type="text"
                     placeholder="Fecha Nacimiento"
+                    onChange={handleOnChange}
                 />
              </Form.Group>
             </Row>
@@ -114,7 +115,7 @@ export const Formulario = () => {
             <Button 
                 type='submit'
                 id='buttonMostrarMensaje'
-                onClick={saludar}>
+               >
                 Saludo
             </Button>
         </Form>
