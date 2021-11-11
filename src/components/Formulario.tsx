@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 import { concatenarNombre } from '../domain/concatenarNombre';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-datepicker/dist/react-datepicker.css";    
 import { INombre } from '../interface/INombre';
 import DatePicker from "react-datepicker";
 import { calcularEdad } from '../domain/calcularEdad';
-import sombreroCumpleaños from '../image/sombreroCumpleaños.png'
 import { IEdad } from '../interface/IEdad';
+import { obtenerIp } from '../domain/obtenerIp';
 
 export const Formulario = () => {
 
@@ -19,14 +19,15 @@ export const Formulario = () => {
         segundoApellido: "",     
     });
     const [startDate, setStartDate] = useState<Date>(new Date());
-    const [validated, setValidated] = useState<boolean>(false); 
+    const [validated, setValidated] = useState<boolean>(false);
     
-    const handleSubmitForm = (event: any) => {                        
+    const handleSubmitForm = (event: any) => {                               
+        const form = event.currentTarget;
         event.preventDefault();
         event.stopPropagation();                  
-        setValidated(true);                                 
-        const form = event.currentTarget; 
-        if (form.checkValidity()) {
+        setValidated(true);
+                                                
+        if (form.checkValidity()) {           
             saludar(formulario);           
         };
     };
@@ -39,28 +40,24 @@ export const Formulario = () => {
         setStartDate(date);     
     };
 
-    const saludar = (nombre: INombre): void => {          
+    const saludar = (nombre: INombre)  => {          
         const nombreConcatenado = concatenarNombre(nombre);
         const {edad,error}: IEdad = calcularEdad(startDate);
         if(error){
-            handleReset(error)
-        } else{
-            Swal.fire({ 
-                title: `Hola ${nombreConcatenado}, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices ${edad} años !`,
-                confirmButtonText: 'Ok',
-                imageUrl: sombreroCumpleaños,
-                imageWidth: 300,
-                imageHeight: 100,
-                imageAlt: 'Custom image',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                Swal.fire('Tu dirrecion Ip es: !', '', 'success')
+            mostrarErrorDeFechaMayorActual(error);
+        } else { 
+            Swal.fire(`Hola ${nombreConcatenado}, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices ${edad} años !`)
+            .then(async(result: SweetAlertResult) => {
+                if (result.isConfirmed) {    
+                  await obtenerIp().then((ip) =>{ 
+                        Swal.fire(`Tu direccion ip es : ${ip}`, '', 'success');
+                    });                                           
                 }; 
-            });  
+            }); 
         };                        
     };
 
-    const handleReset = (error: string) => {   
+    const mostrarErrorDeFechaMayorActual = (error: string) => {   
         Swal.fire({
             icon: 'error',
             title: error,
@@ -69,12 +66,12 @@ export const Formulario = () => {
 
     return (  
        <> 
-        <Form noValidate validated={validated} onSubmit={handleSubmitForm}>
+        <Form noValidate validated={validated} onSubmit={handleSubmitForm} id='formulario'>
             <Row className="mb-3">
              <Form.Group as={Col} md="4" >
                 <Form.Control
                     required
-                    id="FormControlPrimerNombre"
+                    id="formControlPrimerNombre"
                     name="primerNombre"
                     type="text"
                     placeholder="Primer Nombre"
@@ -86,7 +83,7 @@ export const Formulario = () => {
              </Form.Group>
              <Form.Group as={Col} md="4">
                 <Form.Control
-                    id='FormControlSegundoNombre'
+                    id='formControlSegundoNombre'
                     name='segundoNombre'
                     type="text"
                     placeholder="Segundo Nombre" 
@@ -99,7 +96,7 @@ export const Formulario = () => {
              <Form.Group as={Col} md="4" >
                 <Form.Control
                     required
-                    id="FormControlPrimerApellido"
+                    id="formControlPrimerApellido"
                     name="primerApellido"
                     type="text"
                     placeholder="Primer apellido"
@@ -111,7 +108,7 @@ export const Formulario = () => {
              </Form.Group>
              <Form.Group as={Col} md="4" >
                 <Form.Control
-                    id="FormControlSegundoApellido"
+                    id="formControlSegundoApellido"
                     name="segundoApellido"
                     type="text"
                     placeholder="Segundo apellido"
@@ -122,6 +119,7 @@ export const Formulario = () => {
             <Row>
             <Form.Group as={Col} md="4" >
                 <DatePicker 
+                    id='datePickerFechaNacimiento'
                     placeholderText='Fecha cumpleaños'
                     selected={startDate}
                     onChange={onChangeDatePicker}
@@ -138,7 +136,7 @@ export const Formulario = () => {
              <Form.Group as={Col} md="4" >
                 <Form.Control
                     required
-                    id="FormControlCorreo"
+                    id="formControlCorreo"
                     type="text"
                     placeholder="Correo"
                 />
@@ -149,7 +147,7 @@ export const Formulario = () => {
              <Form.Group as={Col} md="4" >
                 <Form.Control
                     required
-                    id="FormControlTelefono"
+                    id="formControlTelefono"
                     type="text"
                     placeholder="Telefono"
                 />
