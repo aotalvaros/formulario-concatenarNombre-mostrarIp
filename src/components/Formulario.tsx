@@ -37,7 +37,9 @@ export const Formulario = () => {
     };
 
     const onChangeDatePicker = (date: any) => {
-        setStartDate(date);     
+        if (date) {
+            setStartDate(date);    
+        };
     };
 
     const saludar = (nombre: INombre)  => {          
@@ -127,7 +129,6 @@ export const Formulario = () => {
                     dateFormatCalendar="MMMM"
                     yearDropdownItemNumber={15}
                     scrollableYearDropdown
-                    isClearable={true}
                 />            
              </Form.Group>
             </Row>
