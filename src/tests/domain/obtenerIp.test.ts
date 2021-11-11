@@ -14,4 +14,13 @@ describe('Obtener IP', () => {
        await obtenerIp().then(data => expect(data).toEqual('10.0.0.0'));
     });
     
+    test('debe devolver un error', async() => {
+        const respuesta = 'Error de conexion';
+        obtenerIpMock.mockResolvedValue(respuesta);
+    
+       await obtenerIp().catch(error => {
+            expect(error).toBe('Error de conexion');
+        });
+    });
+
 });
