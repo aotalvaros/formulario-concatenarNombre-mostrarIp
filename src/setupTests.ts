@@ -10,3 +10,5 @@ expect.addSnapshotSerializer(createSerializer({
  }));
 
 Enzyme.configure({ adapter: new Adapter() });
+
+require('jest-fetch-mock').enableMocks();
