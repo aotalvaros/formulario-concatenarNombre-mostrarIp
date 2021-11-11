@@ -27,31 +27,31 @@ export const Formulario = () => {
         event.stopPropagation();                  
         setValidated(true);
                                                 
-        if (form.checkValidity()) {           
-            saludar(formulario);           
+        if (form.checkValidity()) {                    
+            saludar(formulario); 
         };
     };
 
     const handleOnChange = (event: any) =>{
-        setFormulario({ ...formulario, [event.target.name]: event.target.value });            
+        setFormulario({ ...formulario, [event.target.name]: event.target.value });
     };
 
-    const onChangeDatePicker = (date: any) => {
+    const onChangeDatePicker = (date: any) => {  
         if (date) {
-            setStartDate(date);    
+         setStartDate(date);    
         };
     };
 
     const saludar = (nombre: INombre)  => {          
         const nombreConcatenado = concatenarNombre(nombre);
-        const {edad,error}: IEdad = calcularEdad(startDate);
+        const {edad,error}: IEdad = calcularEdad(startDate);        
         if(error){
             mostrarErrorDeFechaMayorActual(error);
-        } else { 
+        } else if(!error) {
             Swal.fire(`Hola ${nombreConcatenado}, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices ${edad} años !`)
-            .then(async(result: SweetAlertResult) => {
-                if (result.isConfirmed) {    
-                  await obtenerIp().then((ip) =>{ 
+            .then((result: SweetAlertResult) => {
+                if (result.isConfirmed) {  
+                    obtenerIp().then((ip) =>{ 
                         Swal.fire(`Tu direccion ip es : ${ip}`, '', 'success');
                     });                                           
                 }; 
@@ -63,7 +63,7 @@ export const Formulario = () => {
         Swal.fire({
             icon: 'error',
             title: error,
-          });
+        });
     };
 
     return (  
