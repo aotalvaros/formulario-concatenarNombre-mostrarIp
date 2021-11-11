@@ -1,12 +1,11 @@
 
-export const obtenerIp = async() => {
-    try {
-        const respuesta = await fetch("https://api.ipify.org/?format=json");
-        const datos = await respuesta.json();
-        const ip = datos.ip;
-        return ip       
-    } catch (error) {
-        return 'Error de conexion'
-    };
-                          
+export const obtenerIp = (): Promise<Response> => {
+
+    return fetch("https://api.ipify.or/?format=json")
+        .then((respuesta: Response) => respuesta.json().then(datos => datos.ip))
+        .catch(error => resolverError(error));                                
+};
+
+const resolverError = (error: any): string => { 
+    return 'Error de conexion';
 };
