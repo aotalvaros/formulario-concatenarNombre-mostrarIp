@@ -1,7 +1,7 @@
 
 export const obtenerIp = (): Promise<Response> => {
 
-    return fetch("https://api.ipify.or/?format=json")
+    return fetch("https://api.ipify.org/?format=json")
         .then((respuesta: Response) => respuesta.json().then(datos => datos.ip))
         .catch(error => resolverError(error));                                
 };
