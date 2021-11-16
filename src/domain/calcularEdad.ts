@@ -5,7 +5,7 @@ export const calcularEdad = (fechaNacimiento: Date): IEdad => {
    let resultadoEdad: IEdad = { edad: 0, error: '' };
     
    if (fechaNacimiento.getFullYear() > anioActual) {
-      resultadoEdad.error = 'Ups! ingresa una fecha que no sea mayor a la actual';
+      resultadoEdad.error = 'Debes ingresar una fecha de nacimiento valida';
    } else {
       resultadoEdad.edad = anioActual - fechaNacimiento.getFullYear();
    };
