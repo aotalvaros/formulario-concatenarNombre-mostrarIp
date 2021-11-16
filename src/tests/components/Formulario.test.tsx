@@ -33,7 +33,7 @@ describe('Debe crear el formulario de registro', () => {
         primerApellido: primerApellido,
         segundoApellido: segundoApellido
     };
-    let mensaje: string;
+    let mensaje: any;
 
     beforeAll(() => {
         wrapper = shallow(<Formulario/>);
@@ -44,7 +44,7 @@ describe('Debe crear el formulario de registro', () => {
     });
 
     beforeEach(() => {
-        mensaje = 'Hola Andres Dario Otalvaro Sanchez, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices 33 años !';
+        mensaje = {"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false, "title": "Hola Andres Dario Otalvaro Sanchez, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices 33 años !"};
         wrapper.find("#formControlPrimerNombre").simulate('change', { target: { value: primerNombre, name: 'primerNombre' } });
         wrapper.find("#formControlSegundoNombre").simulate('change', { target: { value: segundoNombre, name: 'segundoNombre' } });
         wrapper.find("#formControlPrimerApellido").simulate('change', { target: { value: primerApellido, name: 'primerApellido' } });
@@ -79,11 +79,11 @@ describe('Debe crear el formulario de registro', () => {
         await expect(sweetAlertMock).toHaveBeenCalledWith(mensaje);
         await expect(obtenerIpMock).toHaveBeenCalled();
         expect(sweetAlertMock).toBeCalledTimes(2);
-        expect(sweetAlertMock).toHaveBeenCalledWith(`Tu direccion ip es : ${resultadoCalcularEdad}`, '', 'success');
+        expect(sweetAlertMock).toHaveBeenCalledWith({"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false, "icon": "success", "title": `Tu direccion ip es : ${resultadoCalcularEdad}`});
     });
 
     test('debe mostrar una alerta de saludo cuando se ingrese todos los campos, segunda prueba', async() => {      
-        mensaje = 'Hola Pepito Pablo Perez Pulgada, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices 20 años !';
+        mensaje = {"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false, "title": "Hola Pepito Pablo Perez Pulgada, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices 20 años !"};
         const resultadoCalcularEdad: IEdad = { edad: 20, error: ''};
 
         concatenarNombreMock.mockReturnValue('Pepito Pablo Perez Pulgada');
@@ -108,7 +108,7 @@ describe('Debe crear el formulario de registro', () => {
         await expect(sweetAlertMock).toHaveBeenCalledWith(mensaje);
         await expect(obtenerIpMock).toHaveBeenCalled();
         expect(sweetAlertMock).toBeCalledTimes(2);
-        expect(sweetAlertMock).toHaveBeenCalledWith(`Tu direccion ip es : ${resultadoCalcularEdad}`, '', 'success');
+        expect(sweetAlertMock).toHaveBeenCalledWith({"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false, "icon": "success", "title": `Tu direccion ip es : ${resultadoCalcularEdad}`});
     });
 
     test('debe mostrar una alerta con la ip, luego de mostrar la alerta de saludo', async() => {
@@ -135,11 +135,11 @@ describe('Debe crear el formulario de registro', () => {
         expect(calcularEdadMock).toHaveBeenCalledWith(anioNacimiento);
         await expect(sweetAlertMock).toHaveBeenCalledWith(mensaje);
         await expect(obtenerIpMock).toHaveBeenCalled();
-        expect(sweetAlertMock).toHaveBeenCalledWith(`Tu direccion ip es : ${resultadoCalcularEdad}`, '', 'success');
+        expect(sweetAlertMock).toHaveBeenCalledWith({"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false, "icon": "success", "title": `Tu direccion ip es : ${resultadoCalcularEdad}`});
     });
 
     test('debe mostrar una alerta con la ip, luego de mostrar la alerta de saludo, segunda prueba', async() => {
-        mensaje = 'Hola Luis Felipe Quintero Vergara, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices 40 años !';
+        mensaje = {"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false, "title": "Hola Luis Felipe Quintero Vergara, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices 40 años !"};
         const resultadoCalcularEdad: IEdad = { edad: 40, error: ''};
         const primerNombreDos: string = "Luis";
         const segundoNombreDos: string = "Felipe";
@@ -181,7 +181,7 @@ describe('Debe crear el formulario de registro', () => {
         expect(calcularEdadMock).toHaveBeenCalledWith(anioNacimiento);
         await expect(sweetAlertMock).toHaveBeenCalledWith(mensaje);
         await expect(obtenerIpMock).toHaveBeenCalled();
-        expect(sweetAlertMock).toHaveBeenCalledWith(`Tu direccion ip es : ${resultadoCalcularEdad}`, '', 'success');
+        expect(sweetAlertMock).toHaveBeenCalledWith({"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false, "icon": "success", "title": `Tu direccion ip es : ${resultadoCalcularEdad}`});
     });
 
     test('debe mostrar una alerta de error cuando se ingresa una fecha mayor a la actual', () => {      
