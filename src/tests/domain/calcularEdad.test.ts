@@ -21,12 +21,12 @@ describe('Calcular Edad', () => {
     test('No debe recibir una fecha mayor a la actual', () => {
         fechaDeNacimiento.setFullYear(2250);
 
-        expect(calcularEdad(fechaDeNacimiento).error).toBe('Ups! ingresa una fecha que no sea mayor a la actual');
+        expect(calcularEdad(fechaDeNacimiento).error).toBe('Debes ingresar una fecha de nacimiento valida');
     });
 
     test('No debe recibir una fecha mayor a la actual, segunda prueba', () => {
         fechaDeNacimiento.setFullYear(2023);
 
-        expect(calcularEdad(fechaDeNacimiento).error).toBe('Ups! ingresa una fecha que no sea mayor a la actual');
+        expect(calcularEdad(fechaDeNacimiento).error).toBe('Debes ingresar una fecha de nacimiento valida');
     });
 });
