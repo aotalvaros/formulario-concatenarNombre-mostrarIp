@@ -70,6 +70,9 @@ describe('Debe crear el formulario de registro', () => {
             preventDefault: () => {},
             stopPropagation: () => {},
             currentTarget: {
+                Correo:{
+                    checkValidity: jest.fn().mockReturnValue(true)
+                },
                 checkValidity: jest.fn().mockReturnValue(true)            
             }
         });   
@@ -99,6 +102,9 @@ describe('Debe crear el formulario de registro', () => {
             preventDefault: () => {},
             stopPropagation: () => {},
             currentTarget: {
+                Correo:{
+                    checkValidity: jest.fn().mockReturnValue(true)
+                },
                 checkValidity: jest.fn().mockReturnValue(true)            
             }
         });   
@@ -127,6 +133,9 @@ describe('Debe crear el formulario de registro', () => {
             preventDefault: () => {},
             stopPropagation: () => {},
             currentTarget: {
+                Correo:{
+                    checkValidity: jest.fn().mockReturnValue(true)
+                },
                 checkValidity: jest.fn().mockReturnValue(true)            
             }
         });   
@@ -173,6 +182,9 @@ describe('Debe crear el formulario de registro', () => {
             preventDefault: () => {},
             stopPropagation: () => {},
             currentTarget: {
+                Correo:{
+                    checkValidity: jest.fn().mockReturnValue(true)
+                },
                 checkValidity: jest.fn().mockReturnValue(true)            
             }
         });   
@@ -195,6 +207,9 @@ describe('Debe crear el formulario de registro', () => {
             preventDefault: () => {},
             stopPropagation: () => {},
             currentTarget: {
+                Correo:{
+                    checkValidity: jest.fn().mockReturnValue(true)
+                },
                 checkValidity: jest.fn().mockReturnValue(true)            
             }
         });  
@@ -218,6 +233,9 @@ describe('Debe crear el formulario de registro', () => {
             preventDefault: () => {},
             stopPropagation: () => {},
             currentTarget: {
+                Correo:{
+                    checkValidity: jest.fn().mockReturnValue(false)
+                },
                 checkValidity: jest.fn().mockReturnValue(false)            
             }
         });   
@@ -225,11 +243,14 @@ describe('Debe crear el formulario de registro', () => {
         expect(sweetAlertMock).not.toHaveBeenCalled();
     });
     
-    test('No debe seguir validando el formulario cuando este en false', () => {
+    test('debe verificar cuando el formulario es valido y cuando no sea valido mostrar mensaje de errores', () => {
         wrapper.find('#formulario').simulate('submit', {
             preventDefault: () => {},
             stopPropagation: () => {},
             currentTarget: {
+                Correo:{
+                    checkValidity: jest.fn().mockReturnValue(true)
+                },
                 checkValidity: jest.fn().mockReturnValue(false)            
             }
         });
@@ -249,6 +270,9 @@ describe('Debe crear el formulario de registro', () => {
             preventDefault: () => {},
             stopPropagation: () => {},
             currentTarget: {
+                Correo:{
+                    checkValidity: jest.fn().mockReturnValue(true)
+                },
                 checkValidity: jest.fn().mockReturnValue(true)            
             }
         });
