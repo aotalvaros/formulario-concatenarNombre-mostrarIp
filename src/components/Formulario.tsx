@@ -31,9 +31,9 @@ export const Formulario = () => {
         setValidated(true);
         setIsOnlyTheEmailValid(false);
 
-        if(event.currentTarget.Correo.checkValidity() && !isValidEmail(correo)){
-            setIsOnlyTheEmailValid(true);
-            setValidated(false); //---
+        if(event.currentTarget.Correo.checkValidity() && !isValidEmail(correo)){         
+            setIsOnlyTheEmailValid(true);   
+            setValidated(false);        
         } else if (form.checkValidity()) {                
             saludar(formulario); 
         };
@@ -168,7 +168,7 @@ export const Formulario = () => {
                 
                 <Row >
                     <Col lg="4" className="mb-2">
-                        <InputGroup>
+                        <InputGroup>    
                             <DatePicker  
                                 required                         
                                 id='datePickerFechaNacimiento'
@@ -194,7 +194,7 @@ export const Formulario = () => {
                             placeholder="Correo"
                             name='Correo'
                             onChange={handleOnChangeCorreo}
-                            isInvalid={isOnlyTheEmailValid}                           
+                            isInvalid={isOnlyTheEmailValid}                    
                         />  
                         {
                             !isOnlyTheEmailValid ? (
@@ -207,7 +207,8 @@ export const Formulario = () => {
                                 </Form.Control.Feedback>                            
                             )
                         }
-                    </InputGroup>                
+                    </InputGroup>
+                                   
                 </Row>
 
                 <Row>
