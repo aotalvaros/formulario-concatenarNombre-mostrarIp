@@ -31,7 +31,8 @@ describe('Debe mostrar un formulario', () => {
     let calcularEdadMock: jest.MockedFunction<(fechaNacimiento: Date) => IEdad>;
     let sweetAlertMock: any;
     let mensajeIp: SweetAlertOptions;
-    let obtenerIpMock: any; 
+    let obtenerIpMock: any;
+    let renderFormularioConFormik: any 
     
     const fechaDeNacimientoUno: Date = new Date('1988-01-01');
     const fechaDeNacimientoDos: Date = new Date('2002-01-01');
@@ -60,7 +61,8 @@ describe('Debe mostrar un formulario', () => {
     
     
     beforeEach(() => {
-        const { container } = render(<FormularioConFormik />);
+        renderFormularioConFormik = render(<FormularioConFormik />);
+        const { container } = renderFormularioConFormik;
         inputPrimerNombre = container.querySelector('input[name="inputPrimerNombre"]');
         inputSegundoNombre = container.querySelector('input[name="inputSegundoNombre"]');
         inputPrimerApellido = container.querySelector('input[name="inputPrimerApellido"]');
@@ -121,10 +123,10 @@ describe('Debe mostrar un formulario', () => {
         concatenarNombreMock.mockReturnValue('Carlos Mario Quintero Pereira');
         calcularEdadMock.mockReturnValue(resultadoCalcularEdad);
         await waitFor(()=>{
-            fireEvent.change(inputPrimerNombre,{ target: { value: 'Carlos' }});
-            fireEvent.change(inputSegundoNombre,{ target: { value: 'Mario' }});
-            fireEvent.change(inputPrimerApellido,{ target: { value: 'Quintero' }});
-            fireEvent.change(inputSegundoApellido,{ target: { value: 'Pereira' }});
+            fireEvent.change(inputPrimerNombre,{ target: { value: nombreDos.primerNombre }});
+            fireEvent.change(inputSegundoNombre,{ target: { value: nombreDos.segundoNombre }});
+            fireEvent.change(inputPrimerApellido,{ target: { value: nombreDos.primerApellido }});
+            fireEvent.change(inputSegundoApellido,{ target: { value: nombreDos.segundoApellido }});
             fireEvent.change(inputCorreo,{ target: { value: 'Carlos@correo.com' }});
             fireEvent.change(inputTelefono,{ target: { value: '98765' }});           
             fireEvent.change(inputFechaNacimiento,{ target: { value: fechaDeNacimientoDos }});
@@ -145,10 +147,10 @@ describe('Debe mostrar un formulario', () => {
         concatenarNombreMock.mockReturnValue('Maria Palito Aquiles Bailo');
         calcularEdadMock.mockReturnValue(resultadoCalcularEdad);
         await waitFor(()=>{
-            fireEvent.change(inputPrimerNombre,{ target: { value: 'Maria' }});
-            fireEvent.change(inputSegundoNombre,{ target: { value: 'Palito' }});
-            fireEvent.change(inputPrimerApellido,{ target: { value: 'Aquiles' }});
-            fireEvent.change(inputSegundoApellido,{ target: { value: 'Bailo' }});
+            fireEvent.change(inputPrimerNombre,{ target: { value: nombreTres.primerNombre }});
+            fireEvent.change(inputSegundoNombre,{ target: { value: nombreTres.segundoNombre }});
+            fireEvent.change(inputPrimerApellido,{ target: { value: nombreTres.primerApellido }});
+            fireEvent.change(inputSegundoApellido,{ target: { value: nombreTres.segundoApellido }});
             fireEvent.change(inputCorreo,{ target: { value: 'maria@hotmail.com' }});
             fireEvent.change(inputTelefono,{ target: { value: '222222' }});           
             fireEvent.change(inputFechaNacimiento,{ target: { value: fechaDeNacimientoTres }});
@@ -218,62 +220,53 @@ describe('Debe mostrar un formulario', () => {
         });
     });
 
-    test('', () => {
-        
-    })
-    
- 
-    
-  /*  test("debe mostrar mensajes de error si los campos estan vacios", async () => { 
+    test('debe el formulario tener validaciones de los campos que no sean vacios', async() => {
+        const { getByTestId } = renderFormularioConFormik;
         fireEvent.blur(inputPrimerNombre);
         fireEvent.blur(inputPrimerApellido);
         fireEvent.blur(inputCorreo);
-        fireEvent.click(button);
-      
+        fireEvent.blur(inputFechaNacimiento);
+        fireEvent.blur(inputTelefono);
+        fireEvent.click(btnRegistrarse);
+
         await waitFor(() => {
             expect(getByTestId("errorPrimerNombre")).not.toBe(null);
             expect(getByTestId("errorPrimerNombre")).toHaveTextContent("Por favor ingrese el nombre.");
             expect(getByTestId("errorPrimerApellido")).not.toBe(null);
             expect(getByTestId("errorPrimerApellido")).toHaveTextContent("Por favor ingrese el apellido.");
+            expect(getByTestId("errorFecha")).not.toBe(null);
+            expect(getByTestId("errorFecha")).toHaveTextContent("Por favor ingrese una fecha.");
             expect(getByTestId("errorCorreo")).not.toBe(null);
-            expect(getByTestId("errorCorreo")).toHaveTextContent(" Por favor ingrese el correo.");
+            expect(getByTestId("errorCorreo")).toHaveTextContent("Por favor ingrese el correo.");
+            expect(getByTestId("errorTelefono")).not.toBe(null);
+            expect(getByTestId("errorTelefono")).toHaveTextContent("Por favor un ingrese numero de telefono.");
         });
     });
 
-    test('debe validar que los campos esten llenos', async() => {
-        fireEvent.change(inputPrimerNombre,{
-        target:{
-              value: 'Andres'
-            }
+    test('si los campos estan llenos no debe sacar errores de campos vacios', async () => {
+        const resultadoCalcularEdad: IEdad = { edad: 32, error: ''};
+        calcularEdadMock.mockReturnValue(resultadoCalcularEdad);
+        const { queryByTestId } = renderFormularioConFormik;
+        
+        await waitFor(() => {
+            fireEvent.change(inputPrimerNombre,{ target: { value: nombreUno.primerNombre }});
+            fireEvent.change(inputPrimerApellido,{ target: { value: nombreUno.primerApellido }});
+            fireEvent.change(inputCorreo,{ target: { value: 'andres@correo.com' }});
+            fireEvent.change(inputTelefono,{ target: { value: '1234567' }});           
+            fireEvent.change(inputFechaNacimiento,{ target: { value: fechaDeNacimientoUno }});
+        }); 
+        fireEvent.click(btnRegistrarse);
+    
+        await waitFor(() => {
+            expect(queryByTestId("errorPrimerNombre")).toBe(null);
+            expect(queryByTestId("errorPrimerApellido")).toBe(null);
+            expect(queryByTestId("errorFecha")).toBe(null);
+            expect(queryByTestId("errorCorreo")).toBe(null);
+            expect(queryByTestId("errorTelefono")).toBe(null);
         });
-        fireEvent.change(inputPrimerApellido,{
-        target:{
-              value: 'Otalvaro'
-            }
-        });
-        fireEvent.change(inputCorreo,{
-        target:{
-              value: 'andres@correo.com'
-            }
-        });
-
-        expect(inputPrimerNombre).toHaveBeenCalledWith('Andres');
-        expect(inputPrimerNombre).toHaveBeenCalledWith('Otalvaro');
-        expect(inputPrimerNombre).toHaveBeenCalledWith('andres@correo.com');
-
-        await waitFor(()=>{
-            expect(getByTestId("errorPrimerNombre")).toBe(null);
-            expect(getByTestId("errorPrimerAPellido")).toBe(null);
-            expect(getByTestId("errorCorreo")).toBe(null);
-        })
     });
-
-    test('debe mostrar una ventana de saludo con los nombres y la edad', () => {
-        fireEvent.change(inputPrimerNombre,{
-        target:{
-              value: 'Andres'
-            }
-        });
-    });*/
-      
+    
+    test('la fecha de nacimiento no debe ser mayor a la actual', () => {
+        
+    });
 });
