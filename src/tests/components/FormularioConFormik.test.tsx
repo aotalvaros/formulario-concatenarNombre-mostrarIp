@@ -265,8 +265,72 @@ describe('Debe mostrar un formulario', () => {
             expect(queryByTestId("errorTelefono")).toBe(null);
         });
     });
-    
-    test('la fecha de nacimiento no debe ser mayor a la actual', () => {
-        
+
+    test('debe validar que el correo tenga un formato valido', async () => {
+        const { queryByTestId } = renderFormularioConFormik;
+        await waitFor(() => {
+            fireEvent.change(inputCorreo,{ target: { value: 'andres@correo.com' }});
+        }); 
+        fireEvent.click(btnRegistrarse);
+
+        await waitFor(() => {
+            expect(queryByTestId("errorCorreo")).toBe(null);
+        });
     });
+
+    test('si el correo ingresado no tiene un campo valido, debe mostrar un mensaje de error', async() => {
+        const { getByTestId } = renderFormularioConFormik;
+        fireEvent.blur(inputCorreo);
+        await waitFor(() => {
+            fireEvent.change(inputCorreo,{ target: { value: 'anhotmail.com' }});
+        }); 
+        fireEvent.click(btnRegistrarse);
+
+        await waitFor(() => {
+            expect(getByTestId("errorCorreo")).not.toBe(null);
+            expect(getByTestId("errorCorreo")).toHaveTextContent("El correo no tiene un formato valido.");
+        });
+    });
+
+    test('si el correo ingresado no tiene un campo valido, debe mostrar un mensaje de error, segunda prueba', async() => {
+        const { getByTestId } = renderFormularioConFormik;
+        fireEvent.blur(inputCorreo);
+        await waitFor(() => {
+            fireEvent.change(inputCorreo,{ target: { value: 'luis.com' }});
+        }); 
+        fireEvent.click(btnRegistrarse);
+
+        await waitFor(() => {
+            expect(getByTestId("errorCorreo")).not.toBe(null);
+            expect(getByTestId("errorCorreo")).toHaveTextContent("El correo no tiene un formato valido.");
+        });
+    });
+
+    test('si el correo ingresado no tiene un campo valido, debe mostrar un mensaje de error, tercera prueba', async() => {
+        const { getByTestId } = renderFormularioConFormik;
+        fireEvent.blur(inputCorreo);
+        await waitFor(() => {
+            fireEvent.change(inputCorreo,{ target: { value: 'luis@.com.co' }});
+        }); 
+        fireEvent.click(btnRegistrarse);
+
+        await waitFor(() => {
+            expect(getByTestId("errorCorreo")).not.toBe(null);
+            expect(getByTestId("errorCorreo")).toHaveTextContent("El correo no tiene un formato valido.");
+        });
+    });
+    
+    test('si el correo ingresado no tiene un campo valido, debe mostrar un mensaje de error, cuarta prueba', async() => {
+        const { getByTestId } = renderFormularioConFormik;
+        fireEvent.blur(inputCorreo);
+        await waitFor(() => {
+            fireEvent.change(inputCorreo,{ target: { value: '@hotm.com' }});
+        }); 
+        fireEvent.click(btnRegistrarse);
+
+        await waitFor(() => {
+            expect(getByTestId("errorCorreo")).not.toBe(null);
+            expect(getByTestId("errorCorreo")).toHaveTextContent("El correo no tiene un formato valido.");
+        });
+    });  
 });
