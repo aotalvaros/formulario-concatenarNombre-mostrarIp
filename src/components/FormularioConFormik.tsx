@@ -1,4 +1,4 @@
-import { Field, Formik, Form } from "formik";
+import { Field, Formik, Form, ErrorMessage } from "formik";
 import React from "react";
 import * as Yup from "yup";
 import Swal, { SweetAlertResult } from "sweetalert2";
@@ -65,19 +65,21 @@ export const FormularioConFormik = () => {
         onSubmit={(values: any) => {
           handleOnChange(values);
         }}
-        // validationSchema={ Yup.object({
-        //   inputPrimerNombre: Yup.string()
-        //     .max(15, "Debe tener 15 caracteres o menos.")
-        //     .required("Requerido"),
-        //   inputPrimerApellido: Yup.string()
-        //     .max(15, "Debe tener 15 caracteres o menos.")
-        //     .require("Requerido"),
-        //   inputCorreo: Yup.string()
-        //     .email("El correo no tiene un formato valido.")
-        //     .required("Requerido"),
-
-        // })
-        // }
+        validationSchema={ Yup.object({
+          inputPrimerNombre: Yup.string()
+            .required("Por favor ingrese el nombre."),
+          inputPrimerApellido: Yup.string()
+            .required("Por favor ingrese el apellido."),
+          inputCorreo: Yup.string()
+            .email("El correo no tiene un formato valido.")
+            .required("Por favor ingrese el correo."),
+          inputFechaNacimiento:Yup.date()
+            .nullable()
+            .required("Por favor ingrese una fecha."),
+          inputTelefono: Yup.string()
+          .required("Por favor un ingrese numero de telefono."),
+        })
+        }
       >
         {(formik: any, props: any) => (
           <Form>
@@ -86,6 +88,8 @@ export const FormularioConFormik = () => {
               type="text"
               placeholder="Primer Nombre"
             />
+            <ErrorMessage data-testid="errorPrimerNombre" name='inputPrimerNombre' component='span'/>
+            
             <Field
               name="inputSegundoNombre"
               type="text"
@@ -96,6 +100,8 @@ export const FormularioConFormik = () => {
               type="text"
               placeholder="Primer Apellido"
             />
+            <ErrorMessage data-testid="errorPrimerApellido" name='inputPrimerApellido' component='span'/>
+            
             <Field
               name="inputSegundoApellido"
               type="text"
@@ -108,8 +114,22 @@ export const FormularioConFormik = () => {
               scrollableYearDropdown
               maxDate={new Date()}
             />
-            <Field name="inputCorreo" type="text" placeholder="Correo" />
-            <Field name="inputTelefono" type="text" placeholder="Telefono" />
+            <ErrorMessage data-testid="errorFecha" name='inputFechaNacimiento' component='span'/>
+
+            <Field 
+              name="inputCorreo" 
+              type="text" 
+              placeholder="Correo" 
+            />
+            <ErrorMessage data-testid="errorCorreo" name='inputCorreo' component='span'/>
+
+            <Field 
+              name="inputTelefono" 
+              type="text" 
+              placeholder="Telefono" 
+            />
+            <ErrorMessage data-testid="errorTelefono" name='inputTelefono' component='span'/>
+            
             <button type="submit">Registrar</button>
           </Form>
         )}
