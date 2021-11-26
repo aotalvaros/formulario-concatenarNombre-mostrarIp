@@ -1,5 +1,5 @@
 
-export const obtenerIp = (): Promise<Response> => {
+export const obtenerIp = (): Promise<any> => {
 
     return fetch("https://api.ipify.org/?format=json")
         .then((respuesta: Response) => respuesta.json().then(datos => datos.ip))
