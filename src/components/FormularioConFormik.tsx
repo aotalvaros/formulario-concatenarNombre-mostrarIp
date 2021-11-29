@@ -107,7 +107,7 @@ export const FormularioConFormik = () => {
                 src={logoGobanUnidos}
               />
               <Row className="mb-2">
-                <Col xs="12" lg="6" className="mb-2">
+                <Col xs="12" lg="6">
                   <Field name="inputPrimerNombre">
                     {({ field }: any) => (
                       <TextField
@@ -129,7 +129,7 @@ export const FormularioConFormik = () => {
                   />
                 </Col>
 
-                <Col xs="12" lg="6" className="mb-2">
+                <Col xs="12" lg="6">
                   <Field name="inputSegundoNombre">
                     {({ field }: any) => (
                       <TextField
@@ -142,8 +142,8 @@ export const FormularioConFormik = () => {
                 </Col>
               </Row>
 
-              <Row className="mb-3">
-                <Col xs="12" lg="6" className="mb-2">
+              <Row className="mb-2">
+                <Col xs="12" lg="6">
                   <Field name="inputPrimerApellido">
                     {({ field }: any) => (
                       <TextField
@@ -164,8 +164,7 @@ export const FormularioConFormik = () => {
                     component="span"
                   />
                 </Col>
-
-                <Col xs="12" lg="6" className="mb-2">
+                <Col xs="12" lg="6">
                   <Field name="inputSegundoApellido">
                     {({ field }: any) => (
                       <TextField
@@ -178,7 +177,7 @@ export const FormularioConFormik = () => {
                 </Col>
               </Row>
 
-              <Row className="mb-3">
+              <Row className="mb-2">
                 <Col xs="12" lg="6" className="mb-2">
                   <Field name="inputCorreo">
                     {({ field }: any) => (
@@ -217,26 +216,25 @@ export const FormularioConFormik = () => {
                   />
                 </Col>
               </Row>
-              <Row className="mb-3">
-                <Col xs="12" lg="6" className="mb-2">
-                  <Field
+              
+              <Row lg={12} className="date-picker">               
+                  <Field                   
                     name="inputFechaNacimiento"
                     component={FormDatePicker}
-                    label="Fecha de nacimiento"
+                    label="Fecha de Nacimiento"
                     format="MM/dd/yyyy"
-                    maxDate={new Date()}
-                  />
-                </Col>
-                <Col xs="12">
+                    maxDate={new Date()}                  
+                  />                                                      
                   <ErrorMessage
                     className="error-message"
                     data-testid="errorFecha"
                     name="inputFechaNacimiento"
                     component="span"
                   />
-                </Col>
               </Row>
-              <Button type="submit" className="text-center mb-2">
+                
+              
+              <Button type="submit" className="text-center mb-2 btn-saludar">
                 Registrar
               </Button>
             </Form>
