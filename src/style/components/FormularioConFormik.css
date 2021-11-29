@@ -1,0 +1,48 @@
+.btn-saludar{
+    margin-top: 30px;
+}
+
+.date-picker{
+    padding: 10px;
+}
+
+img {
+    display: block;
+    margin: auto;
+    margin-bottom: 10px;
+}
+
+.border {
+    color: rgb(230, 64, 58);
+    font-size: 1em;
+    margin: 1em;
+    padding: 0.25em 1em;
+    border: 2px solid palevioletred;
+    border-radius: 3px;
+}
+.abs-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+  
+.card-container.card {
+    max-width: 550px;
+    padding: 40px 40px;
+    border: 2px solid rgba(153, 163, 164);
+}
+  
+.logo-img {
+    max-height: 90px;
+    width: auto;
+    height: auto;
+}
+
+.error-message {
+    color: rgb(221, 88, 88);
+}
+  
+.has-error {
+    border: 1px solid red;
+}
