@@ -1,49 +1,13 @@
 body {
   font: 14px "Century Gothic", Futura, sans-serif;
-  margin: 20px;
-}
-
-p {
-  margin-top: 20px !important;
-  color: red;
 }
 
 .btn-primary {
   background-color: #216101 !important;
-  border-color: #216101 !important;
-  margin-top: 20px;
+  border-color: #216101 !important; 
   justify-content: center;
 }
 
-.abs-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-}
 
-.card-container.card {
-  max-width: 550px;
-  padding: 40px 40px;
-  border: 2px solid rgba(153, 163, 164);
-}
 
-.logo-img {
-  max-height: 90px;
-  width: auto;
-  height: auto;
-}
 
-img {
-  display: block;
-  margin: auto;
-  margin-bottom: 10px;
-}
-.border {
-  color: rgb(230, 64, 58);
-  font-size: 1em;
-  margin: 1em;
-  padding: 0.25em 1em;
-  border: 2px solid palevioletred;
-  border-radius: 3px;
-}
