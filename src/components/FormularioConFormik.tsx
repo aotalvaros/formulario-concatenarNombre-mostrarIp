@@ -40,14 +40,25 @@ export const FormularioConFormik = () => {
         allowEnterKey: false,
       }).then((result: SweetAlertResult) => {
         if (result.isConfirmed) {
-          obtenerIp().then((ip) =>
-            Swal.fire({
-              title: `Tu direccion ip es : ${ip}`,
-              icon: "success",
-              allowOutsideClick: false,
-              allowEscapeKey: false,
-              allowEnterKey: false,
-            })
+          obtenerIp().then((ip) => { 
+            if (ip === 'Error de conexion') {
+              Swal.fire({
+                title: ip,
+                icon: "error",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+              });
+            } else {
+              Swal.fire({
+                title: `Tu direccion ip es : ${ip}`,
+                icon: "success",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+              });
+            }
+          }          
           );
         }
       });
@@ -77,21 +88,18 @@ export const FormularioConFormik = () => {
           handleOnChange(values);
         }}
         validationSchema={Yup.object({
-          inputPrimerNombre: Yup.string().required(
-            "Por favor ingrese el nombre."
-          ),
-          inputPrimerApellido: Yup.string().required(
-            "Por favor ingrese el apellido."
-          ),
+          inputPrimerNombre: Yup.string()
+            .required("Por favor ingrese el nombre."),
+          inputPrimerApellido: Yup.string()
+            .required("Por favor ingrese el apellido."),
           inputCorreo: Yup.string()
             .email("El correo no tiene un formato valido.")
             .required("Por favor ingrese el correo."),
           inputFechaNacimiento: Yup.date()
             .required("Por favor ingrese una fecha.")
             .max(new Date(), "Debes ingresar una fecha de nacimiento valida"),
-          inputTelefono: Yup.string().required(
-            "Por favor un ingrese numero de telefono."
-          ),
+          inputTelefono: Yup.number()
+            .required("Por favor un ingrese numero de telefono.")
         })}
       >
         {({ handleSubmit, errors, touched }: any) => (
@@ -106,7 +114,7 @@ export const FormularioConFormik = () => {
                 alt=""
                 src={logoGobanUnidos}
               />
-              <Row className="mb-2">
+              <Row className="col-12 col-sm-6 col-md-12">
                 <Col xs="12" lg="6">
                   <Field name="inputPrimerNombre">
                     {({ field }: any) => (
@@ -142,7 +150,7 @@ export const FormularioConFormik = () => {
                 </Col>
               </Row>
 
-              <Row className="mb-2">
+              <Row className="col-12 col-sm-12 col-md-12">
                 <Col xs="12" lg="6">
                   <Field name="inputPrimerApellido">
                     {({ field }: any) => (
@@ -177,8 +185,8 @@ export const FormularioConFormik = () => {
                 </Col>
               </Row>
 
-              <Row className="mb-2">
-                <Col xs="12" lg="6" className="mb-2">
+              <Row className="col-12 col-sm-12 col-md-12">
+                <Col xs="12" lg="6" >
                   <Field name="inputCorreo">
                     {({ field }: any) => (
                       <TextField
@@ -197,12 +205,12 @@ export const FormularioConFormik = () => {
                   />
                 </Col>
 
-                <Col xs="12" lg="6" className="mb-2">
+                <Col xs="12" lg="6">
                   <Field name="inputTelefono">
                     {({ field }: any) => (
                       <TextField
                         {...field}
-                        type="text"
+                        type="number"
                         label="Telefono"
                         error={!!errors.inputTelefono && touched.inputTelefono}
                       />
@@ -217,7 +225,7 @@ export const FormularioConFormik = () => {
                 </Col>
               </Row>
               
-              <Row lg={12} className="date-picker">               
+              <Row lg={12} className="date-picker col-12 col-sm-6 col-md-12">               
                   <Field                   
                     name="inputFechaNacimiento"
                     component={FormDatePicker}
