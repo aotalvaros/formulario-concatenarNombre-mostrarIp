@@ -16,6 +16,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../style/components/FormularioConFormik.css";
 
 export const FormularioConFormik = () => {
+
   const handleOnChange = (evento: any) => {
     const nombre: INombre = {
       primerNombre: evento.inputPrimerNombre,
@@ -27,6 +28,7 @@ export const FormularioConFormik = () => {
   };
 
   const saludar = (nombre: INombre, fechaNacimiento: Date) => {
+    
     const nombreConcatenado = concatenarNombre(nombre);
     const { edad, error }: IEdad = calcularEdad(fechaNacimiento);
 
@@ -73,7 +75,7 @@ export const FormularioConFormik = () => {
   };
 
   return (
-    <>
+    <div>
       <Formik
         initialValues={{
           inputPrimerNombre: "",
@@ -114,134 +116,135 @@ export const FormularioConFormik = () => {
                 alt=""
                 src={logoGobanUnidos}
               />
-              <Row className="col-12 col-sm-6 col-md-12">
-                <Col xs="12" lg="6">
-                  <Field name="inputPrimerNombre">
-                    {({ field }: any) => (
-                      <TextField
-                        {...field}
-                        type="text"
-                        label="Primer Nombre"
-                        error={
-                          !!errors.inputPrimerNombre &&
-                          touched.inputPrimerNombre
-                        }
-                      />
-                    )}
-                  </Field>
-                  <ErrorMessage
-                    className="error-message"
-                    data-testid="errorPrimerNombre"
-                    name="inputPrimerNombre"
-                    component="span"
-                  />
-                </Col>
+              <div className="inputs-container">
+                <Row className="col-12 col-sm-6 col-md-12">
+                  <Col xs="12" lg="6">
+                    <Field name="inputPrimerNombre">
+                      {({ field }: any) => (
+                        <TextField
+                          {...field}
+                          type="text"
+                          label="Primer Nombre"
+                          error={
+                            !!errors.inputPrimerNombre &&
+                            touched.inputPrimerNombre
+                          }
+                        />
+                      )}
+                    </Field>
+                    <ErrorMessage
+                      className="error-message"
+                      data-testid="errorPrimerNombre"
+                      name="inputPrimerNombre"
+                      component="span"
+                    />
+                  </Col>
 
-                <Col xs="12" lg="6">
-                  <Field name="inputSegundoNombre">
-                    {({ field }: any) => (
-                      <TextField
-                        {...field}
-                        type="text"
-                        label="Segundo Nombre"
-                      />
-                    )}
-                  </Field>
-                </Col>
-              </Row>
+                  <Col xs="12" lg="6">
+                    <Field name="inputSegundoNombre">
+                      {({ field }: any) => (
+                        <TextField
+                          {...field}
+                          type="text"
+                          label="Segundo Nombre"
+                        />
+                      )}
+                    </Field>
+                  </Col>
+                </Row>
 
-              <Row className="col-12 col-sm-12 col-md-12">
-                <Col xs="12" lg="6">
-                  <Field name="inputPrimerApellido">
-                    {({ field }: any) => (
-                      <TextField
-                        {...field}
-                        type="text"
-                        label="Primer Apellido"
-                        error={
-                          !!errors.inputPrimerApellido &&
-                          touched.inputPrimerApellido
-                        }
-                      />
-                    )}
-                  </Field>
-                  <ErrorMessage
-                    className="error-message"
-                    data-testid="errorPrimerApellido"
-                    name="inputPrimerApellido"
-                    component="span"
-                  />
-                </Col>
-                <Col xs="12" lg="6">
-                  <Field name="inputSegundoApellido">
-                    {({ field }: any) => (
-                      <TextField
-                        {...field}
-                        type="text"
-                        label="Segundo Apellido"
-                      />
-                    )}
-                  </Field>
-                </Col>
-              </Row>
+                <Row className="col-12 col-sm-12 col-md-12">
+                  <Col xs="12" lg="6">
+                    <Field name="inputPrimerApellido">
+                      {({ field }: any) => (
+                        <TextField
+                          {...field}
+                          type="text"
+                          label="Primer Apellido"
+                          error={
+                            !!errors.inputPrimerApellido &&
+                            touched.inputPrimerApellido
+                          }
+                        />
+                      )}
+                    </Field>
+                    <ErrorMessage
+                      className="error-message"
+                      data-testid="errorPrimerApellido"
+                      name="inputPrimerApellido"
+                      component="span"
+                    />
+                  </Col>
+                  <Col xs="12" lg="6">
+                    <Field name="inputSegundoApellido">
+                      {({ field }: any) => (
+                        <TextField
+                          {...field}
+                          type="text"
+                          label="Segundo Apellido"
+                        />
+                      )}
+                    </Field>
+                  </Col>
+                </Row>
 
-              <Row className="col-12 col-sm-12 col-md-12">
-                <Col xs="12" lg="6" >
-                  <Field name="inputCorreo">
-                    {({ field }: any) => (
-                      <TextField
-                        {...field}
-                        type="text"
-                        label="Correo"
-                        error={!!errors.inputCorreo && touched.inputCorreo}
-                      />
-                    )}
-                  </Field>
-                  <ErrorMessage
-                    className="error-message"
-                    data-testid="errorCorreo"
-                    name="inputCorreo"
-                    component="span"
-                  />
-                </Col>
+                <Row className="col-12 col-sm-12 col-md-12">
+                  <Col xs="12" lg="6" >
+                    <Field name="inputCorreo">
+                      {({ field }: any) => (
+                        <TextField
+                          {...field}
+                          type="text"
+                          label="Correo"
+                          error={!!errors.inputCorreo && touched.inputCorreo}
+                        />
+                      )}
+                    </Field>
+                    <ErrorMessage
+                      className="error-message"
+                      data-testid="errorCorreo"
+                      name="inputCorreo"
+                      component="span"
+                    />
+                  </Col>
 
-                <Col xs="12" lg="6">
-                  <Field name="inputTelefono">
-                    {({ field }: any) => (
-                      <TextField
-                        {...field}
-                        type="number"
-                        label="Telefono"
-                        error={!!errors.inputTelefono && touched.inputTelefono}
-                      />
-                    )}
-                  </Field>
-                  <ErrorMessage
-                    className="error-message"
-                    data-testid="errorTelefono"
-                    name="inputTelefono"
-                    component="span"
-                  />
-                </Col>
-              </Row>
-              
-              <Row lg={12} className="date-picker col-12 col-sm-6 col-md-12">               
-                  <Field                   
-                    name="inputFechaNacimiento"
-                    component={FormDatePicker}
-                    label="Fecha de Nacimiento"
-                    format="MM/dd/yyyy"
-                    maxDate={new Date()}                  
-                  />                                                      
-                  <ErrorMessage
-                    className="error-message"
-                    data-testid="errorFecha"
-                    name="inputFechaNacimiento"
-                    component="span"
-                  />
-              </Row>
+                  <Col xs="12" lg="6">
+                    <Field name="inputTelefono">
+                      {({ field }: any) => (
+                        <TextField
+                          {...field}
+                          type="number"
+                          label="Telefono"
+                          error={!!errors.inputTelefono && touched.inputTelefono}
+                        />
+                      )}
+                    </Field>
+                    <ErrorMessage
+                      className="error-message"
+                      data-testid="errorTelefono"
+                      name="inputTelefono"
+                      component="span"
+                    />
+                  </Col>
+                </Row>
                 
-              
+                <Row lg={12} className="date-picker col-12 col-sm-6 col-md-12">               
+                    <Field                   
+                      name="inputFechaNacimiento"
+                      component={FormDatePicker}
+                      label="Fecha de Nacimiento"
+                      format="MM/dd/yyyy"
+                      maxDate={new Date()}                  
+                    />                                                      
+                    <ErrorMessage
+                      className="error-message"
+                      data-testid="errorFecha"
+                      name="inputFechaNacimiento"
+                      component="span"
+                    />
+                </Row>
+              </div>
+                              
               <Button type="submit" className="text-center mb-2 btn-saludar">
                 Registrar
               </Button>
@@ -249,6 +252,6 @@ export const FormularioConFormik = () => {
           </Container>
         )}
       </Formik>
-    </>
+    </div>
   );
 };
