@@ -46,3 +46,7 @@ img {
 .has-error {
     border: 1px solid red;
 }
+
+.inputs-container{
+    margin-left: 20px;
+}
