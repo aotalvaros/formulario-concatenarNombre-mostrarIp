@@ -66,6 +66,7 @@
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/react-bootstrap-date-picker": "^4.0.8",
     "@types/react-datepicker": "^4.1.7",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.5",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
     "enzyme-to-json": "^3.6.2",
