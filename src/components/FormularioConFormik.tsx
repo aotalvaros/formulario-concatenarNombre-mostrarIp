@@ -1,7 +1,7 @@
 import { calcularEdad } from "../domain/calcularEdad";
 import { concatenarNombre } from "../domain/concatenarNombre";
 import { Button, Col, Container, Row } from "react-bootstrap";
-import { Field, Formik, Form, ErrorMessage } from "formik";
+import { Field, Formik, Form, ErrorMessage, FormikState } from "formik";
 import { FormDatePicker } from "./utils/custom-formik/FormikDatePicker";
 import { IEdad } from "../interface/IEdad";
 import { INombre } from "../interface/INombre";
@@ -17,17 +17,17 @@ import "../style/components/FormularioConFormik.css";
 
 export const FormularioConFormik = () => {
 
-  const handleOnChange = (evento: any) => {
+  const handleOnChange = (evento: any, resetForm: any) => {
     const nombre: INombre = {
       primerNombre: evento.inputPrimerNombre,
       primerApellido: evento.inputPrimerApellido,
       segundoNombre: evento.inputSegundoNombre,
       segundoApellido: evento.inputSegundoApellido,
     };
-    saludar(nombre, evento.inputFechaNacimiento);
+    saludar(nombre, evento.inputFechaNacimiento, resetForm);
   };
 
-  const saludar = (nombre: INombre, fechaNacimiento: Date) => {
+  const saludar = (nombre: INombre, fechaNacimiento: Date, resetForm: any) => {
     
     const nombreConcatenado = concatenarNombre(nombre);
     const { edad, error }: IEdad = calcularEdad(fechaNacimiento);
@@ -41,29 +41,20 @@ export const FormularioConFormik = () => {
         allowEscapeKey: false,
         allowEnterKey: false,
       }).then((result: SweetAlertResult) => {
-        if (result.isConfirmed) {
           obtenerIp().then((ip) => { 
-            if (ip === 'Error de conexion') {
-              Swal.fire({
-                title: ip,
-                icon: "error",
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                allowEnterKey: false,
-              });
-            } else {
-              Swal.fire({
-                title: `Tu direccion ip es : ${ip}`,
-                icon: "success",
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                allowEnterKey: false,
-              });
-            }
-          }          
+              if (ip === 'Error de conexion') {
+                Swal.fire({ title: ip, icon: "error", allowOutsideClick: false, allowEscapeKey: false, allowEnterKey: false });
+              } else {
+                Swal.fire({ title: `Tu direccion ip es : ${ip}`, icon: "success", allowOutsideClick: false, allowEscapeKey: false, allowEnterKey: false,})
+                  .then((result: SweetAlertResult) => { 
+                    resetForm();
+                  }
+                );
+              }
+            }          
           );
-        }
-      });
+        }     
+      );
     }
   };
 
@@ -86,8 +77,8 @@ export const FormularioConFormik = () => {
           inputTelefono: "",
           inputFechaNacimiento: new Date(),
         }}
-        onSubmit={(values: any) => {
-          handleOnChange(values);
+        onSubmit={(values: any, {resetForm}) => {
+          handleOnChange(values, resetForm);
         }}
         validationSchema={Yup.object({
           inputPrimerNombre: Yup.string()
@@ -124,6 +115,7 @@ export const FormularioConFormik = () => {
                         <TextField
                           {...field}
                           type="text"
+                          id="inputPrimerNombre"
                           label="Primer Nombre"
                           error={
                             !!errors.inputPrimerNombre &&
@@ -146,6 +138,7 @@ export const FormularioConFormik = () => {
                         <TextField
                           {...field}
                           type="text"
+                          id="inputSegundoNombre"
                           label="Segundo Nombre"
                         />
                       )}
@@ -161,6 +154,7 @@ export const FormularioConFormik = () => {
                           {...field}
                           type="text"
                           label="Primer Apellido"
+                          id="inputPrimerApellido"
                           error={
                             !!errors.inputPrimerApellido &&
                             touched.inputPrimerApellido
@@ -181,6 +175,7 @@ export const FormularioConFormik = () => {
                         <TextField
                           {...field}
                           type="text"
+                          id="inputSegundoApellido"
                           label="Segundo Apellido"
                         />
                       )}
@@ -196,6 +191,7 @@ export const FormularioConFormik = () => {
                           {...field}
                           type="text"
                           label="Correo"
+                          id="inputCorreo"
                           error={!!errors.inputCorreo && touched.inputCorreo}
                         />
                       )}
@@ -215,6 +211,7 @@ export const FormularioConFormik = () => {
                           {...field}
                           type="number"
                           label="Telefono"
+                          id="inputTelefono"
                           error={!!errors.inputTelefono && touched.inputTelefono}
                         />
                       )}
@@ -231,6 +228,7 @@ export const FormularioConFormik = () => {
                 <Row lg={12} className="date-picker col-12 col-sm-6 col-md-12">               
                     <Field                   
                       name="inputFechaNacimiento"
+                      id="inputFechaNacimiento"
                       component={FormDatePicker}
                       label="Fecha de Nacimiento"
                       format="MM/dd/yyyy"
