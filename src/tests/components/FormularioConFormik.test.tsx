@@ -1,17 +1,15 @@
-import '@testing-library/jest-dom';
 import { calcularEdad } from '../../domain/calcularEdad';
 import { concatenarNombre } from '../../domain/concatenarNombre';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { FormularioConFormik } from '../../components/FormularioConFormik';
 import { IEdad } from '../../interface/IEdad';
-import { mockFunction } from '../../helpers/JestHelpers';
-import { fireEvent, render, waitFor } from '@testing-library/react';
-import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { INombre } from '../../interface/INombre';
-import { obtenerIp } from '../../domain/obtenerIp';
-import { mount, ReactWrapper } from 'enzyme';
-import { Component } from 'react';
+import { mockFunction } from '../../helpers/JestHelpers';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { obtenerIp } from '../../domain/obtenerIp';
 import DateFnsUtils from '@date-io/date-fns';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
+import '@testing-library/jest-dom';
 
 jest.mock('../../domain/concatenarNombre');
 jest.mock('../../domain/calcularEdad');
@@ -20,13 +18,6 @@ jest.mock('../../domain/obtenerIp');
 
 describe('Debe mostrar un formulario', () => {
 
-    let inputPrimerNombre: any;
-    let inputPrimerApellido: any;
-    let inputSegundoNombre: any;
-    let inputSegundoApellido: any;
-    let inputFechaNacimiento: any;
-    let inputCorreo: any;
-    let inputTelefono: any;
     let mensajeSaludarNombreUno: {};
     let mensajeSaludarNombreDos: {};
     let mensajeSaludarNombreTres: {};
@@ -35,12 +26,10 @@ describe('Debe mostrar un formulario', () => {
     let sweetAlertMock: any;
     let mensajeIp: SweetAlertOptions;
     let obtenerIpMock: any;
-    let wrapper: ReactWrapper<any, Readonly<{}>, Component<{}, {}, any>>
-    let renderFormularioConFormik: any;
 
-    const fechaDeNacimientoUno: Date = new Date('12/01/2000');
-    const fechaDeNacimientoDos: Date = new Date('2002-01-01');
-    const fechaDeNacimientoTres: Date = new Date('1982-01-01');   
+    const fechaDeNacimientoUno: Date = new Date('01/20/1988');
+    const fechaDeNacimientoDos: Date = new Date('01/01/2002');
+    const fechaDeNacimientoTres: Date = new Date('01/01/1982');   
 
     const nombreUno: INombre = {
         primerNombre: 'Andres',
@@ -65,131 +54,115 @@ describe('Debe mostrar un formulario', () => {
     
     
     beforeEach(() => {
-        // renderFormularioConFormik = render(<FormularioConFormik />);
-        wrapper = mount(
+        render(
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <FormularioConFormik />
-            </MuiPickersUtilsProvider>
-        );
-        
-        inputPrimerNombre = wrapper.find('input[name="inputPrimerNombre"]');
-        inputSegundoNombre = wrapper.find('input[name="inputSegundoNombre"]');
-        inputPrimerApellido = wrapper.find('input[name="inputPrimerApellido"]');
-        inputSegundoApellido = wrapper.find('input[name="inputSegundoApellido"]');
-        inputCorreo = wrapper.find('input[name="inputCorreo"]');
-        inputTelefono = wrapper.find('input[name="inputTelefono"]');
-        inputFechaNacimiento = wrapper.find('input[name="inputFechaNacimiento"]');
-        
-        mensajeSaludarNombreUno = {"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false,
-            "title": "Hola Andres Dario Otalvaro Sanchez, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices 32 años !"};
-        mensajeSaludarNombreDos={"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false,
-        "title": "Hola Carlos Mario Quintero Pereira, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices 20 años !"};
-        mensajeSaludarNombreTres={"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false,
-        "title": "Hola Maria Palito Aquiles Bailo, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices 40 años !"};
+            </MuiPickersUtilsProvider> 
+        );       
         concatenarNombreMock = mockFunction(concatenarNombre);
         calcularEdadMock = mockFunction(calcularEdad);
         sweetAlertMock = mockFunction(Swal.fire);
 
-        mensajeIp = {"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false, "icon": "success", "title": `Tu direccion ip es : 10.0.0.0`};
-    });
+        mensajeSaludarNombreUno = {"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false,
+        "title": "Hola Andres Dario Otalvaro Sanchez, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices 32 años !"};
+        mensajeSaludarNombreDos={"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false,
+        "title": "Hola Carlos Mario Quintero Pereira, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices 20 años !"};
+        mensajeSaludarNombreTres={"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false,
+        "title": "Hola Maria Palito Aquiles Bailo, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices 40 años !"};     
+        mensajeIp = {"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false, "icon": "success", "title": `Tu direccion ip es : 10.0.0.0`};       
     
+    });
+
     beforeAll(() => {
         obtenerIpMock = mockFunction(obtenerIp);
-    })
+    });
 
-    test('debe tener un boton de registro y si el registro fue exitoso mostrar un mensaje de saludo', async() => {
-       
-        const resultadoCalcularEdad: IEdad = { edad: 32, error: ''};       
+    test('debe tener un boton de registro y si el registro fue exitoso mostrar un mensaje de saludo', async() => {                   
         concatenarNombreMock.mockReturnValue('Andres Dario Otalvaro Sanchez');
-        calcularEdadMock.mockReturnValue(resultadoCalcularEdad);
+        calcularEdadMock.mockReturnValue(resultadoEdad(32));
         await waitFor(()=>{
-            inputPrimerNombre.simulate('change',{ persist: () => {}, target: { name: 'inputPrimerNombre', value: nombreUno.primerNombre }});
-            inputSegundoNombre.simulate('change',{ persist: () => {}, target: { name: 'inputSegundoNombre', value: nombreUno.segundoNombre }});
-            inputPrimerApellido.simulate('change',{ persist: () => {}, target: { name: 'inputPrimerApellido', value: nombreUno.primerApellido }});
-            inputSegundoApellido.simulate('change',{persist: () => {}, target: { name: 'inputSegundoApellido', value: nombreUno.segundoApellido }});
-            inputCorreo.simulate('change',{ persist: () => {}, target: { name: 'inputCorreo', value: 'andres@correo.com' }});
-            inputTelefono.simulate('change',{ persist: () => {}, target: { name: 'inputTelefono', value: '1234567', }});           
-            inputFechaNacimiento.simulate('change',{ persist: () => {}, target: { name: 'inputFechaNacimiento', value: fechaDeNacimientoUno }});
+            fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombreUno.primerNombre }});
+            fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombreUno.segundoNombre }});
+            fireEvent.change(screen.getByLabelText(/primer apellido/i), { target: { value: nombreUno.primerApellido }});
+            fireEvent.change(screen.getByLabelText(/segundo apellido/i), { target: { value: nombreUno.segundoApellido }});
+            fireEvent.change(screen.getByLabelText(/correo/i), { target: { value: 'andres@correo.com'}});
+            fireEvent.change(screen.getByLabelText(/telefono/i), { target: { value: '345566'}});  
+            fireEvent.change(screen.getByLabelText(/fecha de nacimiento/i), { target: { value: '01/20/1988'} });
         }); 
          
-        wrapper.find("Form").simulate("submit");
-        
-        await waitFor(() => {
-            // expect(inputFechaNacimiento.html()).toMatch('12/01/2000');
+        clickBotonRegistrar();
+       
+        await waitFor(() => {      
             expect(concatenarNombreMock).toHaveBeenCalledWith(nombreUno);
-            expect(calcularEdadMock).toHaveBeenCalled();
+            expect(calcularEdadMock).toHaveBeenCalledWith(fechaDeNacimientoUno);
             expect(sweetAlertMock).toHaveBeenCalledWith(mensajeSaludarNombreUno);         
         });
     });
 
-    test('debe tener un boton de registro y si el registro fue exitoso mostrar un mensaje de saludo,(segunda prueba)', async() => {
-        
-        const resultadoCalcularEdad: IEdad = { edad: 20, error: ''};       
+    test('debe tener un boton de registro y si el registro fue exitoso mostrar un mensaje de saludo,(segunda prueba)', async() => {              
         concatenarNombreMock.mockReturnValue('Carlos Mario Quintero Pereira');
-        calcularEdadMock.mockReturnValue(resultadoCalcularEdad);
+        calcularEdadMock.mockReturnValue(resultadoEdad(20));
         await waitFor(()=>{
-            inputPrimerNombre.simulate('change',{ persist: () => {}, target: { name: 'inputPrimerNombre', value: nombreDos.primerNombre }});
-            inputSegundoNombre.simulate('change',{ persist: () => {}, target: { name: 'inputSegundoNombre', value: nombreDos.segundoNombre }});
-            inputPrimerApellido.simulate('change',{ persist: () => {}, target: { name: 'inputPrimerApellido', value: nombreDos.primerApellido }});
-            inputSegundoApellido.simulate('change',{persist: () => {}, target: { name: 'inputSegundoApellido', value: nombreDos.segundoApellido }});
-            inputCorreo.simulate('change',{ persist: () => {}, target: { name: 'inputCorreo', value: 'Carlos@correo.com' }});
-            inputTelefono.simulate('change',{ persist: () => {}, target: { name: 'inputTelefono', value: '98765' }});           
-            inputFechaNacimiento.simulate('change',{ persist: () => {}, target: { name: 'inputFechaNacimiento', value: fechaDeNacimientoDos }});
+            fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombreDos.primerNombre }});
+            fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombreDos.segundoNombre }});
+            fireEvent.change(screen.getByLabelText(/primer apellido/i), { target: { value: nombreDos.primerApellido }});
+            fireEvent.change(screen.getByLabelText(/segundo apellido/i), { target: { value: nombreDos.segundoApellido }});
+            fireEvent.change(screen.getByLabelText(/correo/i), { target: { value: 'Carlos@correo.com'}}); 
+            fireEvent.change(screen.getByLabelText(/telefono/i), { target: { value: '98765'}});   
+            fireEvent.change(screen.getByLabelText(/fecha de nacimiento/i), { target: { value: '01/01/2002'} });
         }); 
 
-        wrapper.find("Form").simulate("submit");                   
+        fireEvent.click(screen.getByRole('button', {name: /registrar/i}));                   
 
         await waitFor(() => {
             expect(concatenarNombreMock).toHaveBeenCalledWith(nombreDos);
-            expect(calcularEdadMock).toHaveBeenCalled();
+            expect(calcularEdadMock).toHaveBeenCalledWith(fechaDeNacimientoDos)
             expect(sweetAlertMock).toHaveBeenCalledWith(mensajeSaludarNombreDos);         
         });
     });
 
-    test('debe tener un boton de registro y si el registro fue exitoso mostrar un mensaje de saludo,(tercera prueba)', async() => {
-        
-        const resultadoCalcularEdad: IEdad = { edad: 40, error: ''};       
+    test('debe tener un boton de registro y si el registro fue exitoso mostrar un mensaje de saludo,(tercera prueba)', async() => {            
         concatenarNombreMock.mockReturnValue('Maria Palito Aquiles Bailo');
-        calcularEdadMock.mockReturnValue(resultadoCalcularEdad);
+        calcularEdadMock.mockReturnValue(resultadoEdad(40));
         await waitFor(()=>{
-            inputPrimerNombre.simulate('change',{ persist: () => {}, target: { name: 'inputPrimerNombre', value: nombreTres.primerNombre }});
-            inputSegundoNombre.simulate('change',{ persist: () => {}, target: { name: 'inputSegundoNombre', value: nombreTres.segundoNombre }});
-            inputPrimerApellido.simulate('change',{ persist: () => {}, target: { name: 'inputPrimerApellido', value: nombreTres.primerApellido }});
-            inputSegundoApellido.simulate('change',{persist: () => {}, target: { name: 'inputSegundoApellido', value: nombreTres.segundoApellido }});
-            inputCorreo.simulate('change',{ persist: () => {}, target: { name: 'inputCorreo',  value: 'maria@hotmail.com' }});
-            inputTelefono.simulate('change',{ persist: () => {}, target: { name: 'inputTelefono',  value: '222222' }});           
-            inputFechaNacimiento.simulate('change',{ persist: () => {}, target: { name: 'inputFechaNacimiento', value: fechaDeNacimientoTres }});
+            fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombreTres.primerNombre }});
+            fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombreTres.segundoNombre }});
+            fireEvent.change(screen.getByLabelText(/primer apellido/i), { target: { value: nombreTres.primerApellido }});
+            fireEvent.change(screen.getByLabelText(/segundo apellido/i), { target: { value: nombreTres.segundoApellido }});
+            fireEvent.change(screen.getByLabelText(/correo/i), { target: { value: 'maria@hotmail.com' }}); 
+            fireEvent.change(screen.getByLabelText(/telefono/i), { target: { value: '222222'}}); 
+            fireEvent.change(screen.getByLabelText(/fecha de nacimiento/i), { target: { value: '01/01/1982'} });
         }); 
 
-        wrapper.find("Form").simulate("submit");                   
+        fireEvent.click(screen.getByRole('button', {name: /registrar/i}));                                      
 
         await waitFor(() => {
             expect(concatenarNombreMock).toHaveBeenCalledWith(nombreTres);
-            expect(calcularEdadMock).toHaveBeenCalled();
+            expect(calcularEdadMock).toHaveBeenCalledWith(fechaDeNacimientoTres)
             expect(sweetAlertMock).toHaveBeenCalledWith(mensajeSaludarNombreTres);         
         });
     });
 
-    test("debe sacar otra alerta, con un mensaje que contenga la ip del cliente, cuando de click en el boton Aceptar del mensaje de saludo", async () => {
-        const resultadoCalcularEdad: IEdad = { edad: 40, error: ''};       
+    test("debe sacar otra alerta, con un mensaje que contenga la ip del cliente, cuando de click en el boton Aceptar del mensaje de saludo", async () => {     
         concatenarNombreMock.mockReturnValue('Maria Palito Aquiles Bailo');
-        calcularEdadMock.mockReturnValue(resultadoCalcularEdad);
+        calcularEdadMock.mockReturnValue(resultadoEdad(40));
         await waitFor(()=>{
-            inputPrimerNombre.simulate('change',{ persist: () => {}, target: { name: 'inputPrimerNombre',value: 'Maria' }});
-            inputSegundoNombre.simulate('change',{ persist: () => {}, target: { name: 'inputSegundoNombre', value: 'Palito' }});
-            inputPrimerApellido.simulate('change',{ persist: () => {}, target: { name: 'inputPrimerApellido', value: 'Aquiles' }});
-            inputSegundoApellido.simulate('change',{persist: () => {}, target: { name: 'inputSegundoApellido', value: 'Bailo' }});
-            inputCorreo.simulate('change',{ persist: () => {}, target: { name: 'inputCorreo', value: 'maria@hotmail.com' }});
-            inputTelefono.simulate('change',{ persist: () => {}, target: { name: 'inputTelefono', value: '222222' }});           
-            inputFechaNacimiento.simulate('change',{ persist: () => {}, target: { name: 'inputFechaNacimiento', value: fechaDeNacimientoTres }});
-        }); 
+            fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombreTres.primerNombre }});
+            fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombreTres.segundoNombre }});
+            fireEvent.change(screen.getByLabelText(/primer apellido/i), { target: { value: nombreTres.primerApellido }});
+            fireEvent.change(screen.getByLabelText(/segundo apellido/i), { target: { value: nombreTres.segundoApellido }});
+            fireEvent.change(screen.getByLabelText(/correo/i), { target: { value: 'maria@hotmail.com' }}); 
+            fireEvent.change(screen.getByLabelText(/telefono/i), { target: { value: '222222'}}); 
+            fireEvent.change(screen.getByLabelText(/fecha de nacimiento/i), { target: { value: '01/01/1982'} });
+        });
+
         sweetAlertMock.mockResolvedValue({
             isConfirmed: true,
         });
     
         obtenerIpMock.mockResolvedValue('10.0.0.0');
 
-        wrapper.find("Form").simulate("submit"); 
+        fireEvent.click(screen.getByRole('button', {name: /registrar/i}));  
 
         await waitFor(() => {
             expect(sweetAlertMock).toBeCalledTimes(2);
@@ -199,24 +172,23 @@ describe('Debe mostrar un formulario', () => {
         });
     });
 
-    test("cuando no de click en el boton Aceptar del mensaje de saludo, no debe sacar la alerta, con la ip del cliente", async () => {
-        const resultadoCalcularEdad: IEdad = { edad: 40, error: ''};       
+    test("cuando no de click en el boton Aceptar del mensaje de saludo, no debe sacar la alerta, con la ip del cliente", async () => {    
         concatenarNombreMock.mockReturnValue('Maria Palito Aquiles Bailo');
-        calcularEdadMock.mockReturnValue(resultadoCalcularEdad);
+        calcularEdadMock.mockReturnValue(resultadoEdad(40));
         await waitFor(()=>{
-            inputPrimerNombre.simulate('change',{ persist: () => {}, target: { name: 'inputPrimerNombre', value: 'Maria' }});
-            inputSegundoNombre.simulate('change',{ persist: () => {}, target: { name: 'inputSegundoNombre', value: 'Palito' }});
-            inputPrimerApellido.simulate('change',{ persist: () => {}, target: { name: 'inputPrimerApellido', value: 'Aquiles' }});
-            inputSegundoApellido.simulate('change',{persist: () => {}, target: { name: 'inputSegundoApellido', value: 'Bailo' }});
-            inputCorreo.simulate('change',{ persist: () => {}, target: { name: 'inputCorreo', value: 'maria@hotmail.com' }});
-            inputTelefono.simulate('change',{ persist: () => {}, target: { name: 'inputTelefono', value: '222222' }});           
-            inputFechaNacimiento.simulate('change',{ persist: () => {}, target: { name: 'inputFechaNacimiento', value: fechaDeNacimientoTres }});
-        }); 
+            fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombreTres.primerNombre }});
+            fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombreTres.segundoNombre }});
+            fireEvent.change(screen.getByLabelText(/primer apellido/i), { target: { value: nombreTres.primerApellido }});
+            fireEvent.change(screen.getByLabelText(/segundo apellido/i), { target: { value: nombreTres.segundoApellido }});
+            fireEvent.change(screen.getByLabelText(/correo/i), { target: { value: 'maria@hotmail.com' }}); 
+            fireEvent.change(screen.getByLabelText(/telefono/i), { target: { value: '222222'}}); 
+            fireEvent.change(screen.getByLabelText(/fecha de nacimiento/i), { target: { value: '01/01/1982'} });
+        });
         sweetAlertMock.mockResolvedValue({
-            isConfirmed: false,
+            isConfirmed: false
         });
     
-        wrapper.find("Form").simulate("submit"); 
+        fireEvent.click(screen.getByRole('button', {name: /registrar/i}));  
 
         await waitFor(() => {
             expect(sweetAlertMock).toBeCalledTimes(1);
@@ -225,116 +197,118 @@ describe('Debe mostrar un formulario', () => {
         });
     });
 
-    // test('debe el formulario tener validaciones de los campos que no sean vacios', async() => {
-    //     const { getByTestId } = renderFormularioConFormik;
-    //     fireEvent.blur(inputPrimerNombre);
-    //     fireEvent.blur(inputPrimerApellido);
-    //     fireEvent.blur(inputCorreo);
-    //     fireEvent.blur(inputFechaNacimiento);
-    //     fireEvent.blur(inputTelefono); 
+    test('debe el formulario tener validaciones de los campos que no sean vacios', async() => {
+        await waitFor(() => {
+            fireEvent.blur(screen.getByLabelText(/primer nombre/i));
+            fireEvent.blur(screen.getByLabelText(/primer apellido/i));
+            fireEvent.blur(screen.getByLabelText(/correo/i));
+            fireEvent.blur(screen.getByLabelText(/telefono/i)); 
+        });
+
+        await waitFor(() => {         
+            expect(screen.getByTestId("errorPrimerNombre")).not.toBe(null);
+            expect(screen.getByTestId("errorPrimerNombre")).toHaveTextContent("Por favor ingrese el nombre.");
+            expect(screen.getByTestId("errorPrimerApellido")).not.toBe(null);
+            expect(screen.getByTestId("errorPrimerApellido")).toHaveTextContent("Por favor ingrese el apellido.");
+            expect(screen.getByTestId("errorCorreo")).not.toBe(null);
+            expect(screen.getByTestId("errorCorreo")).toHaveTextContent("Por favor ingrese el correo.");
+            expect(screen.getByTestId("errorTelefono")).not.toBe(null);
+            expect(screen.getByTestId("errorTelefono")).toHaveTextContent("Por favor un ingrese numero de telefono.");
+        });
+    });
+
+    test('si los campos estan llenos no debe sacar errores de campos vacios', async () => {
+        const resultadoCalcularEdad: IEdad = { edad: 32, error: ''};
+        calcularEdadMock.mockReturnValue(resultadoCalcularEdad);
         
-    //     await waitFor(() => {         
-    //         expect(getByTestId("errorPrimerNombre")).not.toBe(null);
-    //         expect(getByTestId("errorPrimerNombre")).toHaveTextContent("Por favor ingrese el nombre.");
-    //         expect(getByTestId("errorPrimerApellido")).not.toBe(null);
-    //         expect(getByTestId("errorPrimerApellido")).toHaveTextContent("Por favor ingrese el apellido.");
-    //         expect(getByTestId("errorFecha")).not.toBe(null);
-    //         expect(getByTestId("errorFecha")).toHaveTextContent("Por favor ingrese una fecha.");
-    //         expect(getByTestId("errorCorreo")).not.toBe(null);
-    //         expect(getByTestId("errorCorreo")).toHaveTextContent("Por favor ingrese el correo.");
-    //         expect(getByTestId("errorTelefono")).not.toBe(null);
-    //         expect(getByTestId("errorTelefono")).toHaveTextContent("Por favor un ingrese numero de telefono.");
-    //     });
-    // });
-
-    // test('si los campos estan llenos no debe sacar errores de campos vacios', async () => {
-    //     const resultadoCalcularEdad: IEdad = { edad: 32, error: ''};
-    //     calcularEdadMock.mockReturnValue(resultadoCalcularEdad);
-    //     const { queryByTestId } = renderFormularioConFormik;
-        
-    //     await waitFor(() => {
-    //         fireEvent.change(inputPrimerNombre,{ target: { value: nombreUno.primerNombre }});
-    //         fireEvent.change(inputPrimerApellido,{ target: { value: nombreUno.primerApellido }});
-    //         fireEvent.change(inputCorreo,{ target: { value: 'andres@correo.com' }});
-    //         fireEvent.change(inputTelefono,{ target: { value: '1234567' }});           
-    //         fireEvent.change(inputFechaNacimiento,{ target: { value: fechaDeNacimientoUno }});
-    //     }); 
-    //     fireEvent.click(btnRegistrarse);
+        await waitFor(() => {
+            fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombreDos.primerNombre }});
+            fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombreDos.segundoNombre }});
+            fireEvent.change(screen.getByLabelText(/primer apellido/i), { target: { value: nombreDos.primerApellido }});
+            fireEvent.change(screen.getByLabelText(/segundo apellido/i), { target: { value: nombreDos.segundoApellido }});
+            fireEvent.change(screen.getByLabelText(/correo/i), { target: { value: 'Carlos@correo.com'}}); 
+            fireEvent.change(screen.getByLabelText(/telefono/i), { target: { value: '98765'}});   
+            fireEvent.change(screen.getByLabelText(/fecha de nacimiento/i), { target: { value: '01/01/2002'} });
+        }); 
     
-    //     await waitFor(() => {
-    //         expect(queryByTestId("errorPrimerNombre")).toBe(null);
-    //         expect(queryByTestId("errorPrimerApellido")).toBe(null);
-    //         expect(queryByTestId("errorFecha")).toBe(null);
-    //         expect(queryByTestId("errorCorreo")).toBe(null);
-    //         expect(queryByTestId("errorTelefono")).toBe(null);
-    //     });
-    // });
+        await waitFor(() => {
+            expect(screen.queryByTestId("errorPrimerNombre")).toBe(null);
+            expect(screen.queryByTestId("errorPrimerApellido")).toBe(null);
+            expect(screen.queryByTestId("errorFecha")).toBe(null);
+            expect(screen.queryByTestId("errorCorreo")).toBe(null);
+            expect(screen.queryByTestId("errorTelefono")).toBe(null);
+        });
+    });
 
-    // test('debe validar que el correo tenga un formato valido', async () => {
-    //     const { queryByTestId } = renderFormularioConFormik;
-    //     await waitFor(() => {
-    //         fireEvent.change(inputCorreo,{ target: { value: 'andres@correo.com' }});
-    //     }); 
-    //     fireEvent.click(btnRegistrarse);
+    test('debe validar que el correo tenga un formato valido', async () => {
+        await waitFor(() => {
+            fireEvent.change(screen.getByLabelText(/correo/i),{ target: { value: 'andres@correo.com' }});
+        }); 
+        fireEvent.click(screen.getByRole('button', {name: /registrar/i}));
 
-    //     await waitFor(() => {
-    //         expect(queryByTestId("errorCorreo")).toBe(null);
-    //     });
-    // });
+        await waitFor(() => {
+            expect(screen.queryByTestId("errorCorreo")).toBe(null);
+        });
+    });
 
-    // test('si el correo ingresado no tiene un campo valido, debe mostrar un mensaje de error', async() => {
-    //     const { getByTestId } = renderFormularioConFormik;
-    //     fireEvent.blur(inputCorreo);
-    //     await waitFor(() => {
-    //         fireEvent.change(inputCorreo,{ target: { value: 'anhotmail.com' }});
-    //     }); 
-    //     fireEvent.click(btnRegistrarse);
+    test('si el correo ingresado no tiene un campo valido, debe mostrar un mensaje de error', async() => {
+        fireEvent.blur(screen.getByLabelText(/correo/i));
+        await waitFor(() => {
+            fireEvent.change(screen.getByLabelText(/correo/i),{ target: { value: 'anhotmail.com' }});
+        }); 
+        fireEvent.click(screen.getByRole('button', {name: /registrar/i}));
 
-    //     await waitFor(() => {
-    //         expect(getByTestId("errorCorreo")).not.toBe(null);
-    //         expect(getByTestId("errorCorreo")).toHaveTextContent("El correo no tiene un formato valido.");
-    //     });
-    // });
+        await waitFor(() => {
+            expect(screen.getByTestId("errorCorreo")).not.toBe(null);
+            expect(screen.getByTestId("errorCorreo")).toHaveTextContent("El correo no tiene un formato valido.");
+        });
+    });
 
-    // test('si el correo ingresado no tiene un campo valido, debe mostrar un mensaje de error, segunda prueba', async() => {
-    //     const { getByTestId } = renderFormularioConFormik;
-    //     fireEvent.blur(inputCorreo);
-    //     await waitFor(() => {
-    //         fireEvent.change(inputCorreo,{ target: { value: 'luis.com' }});
-    //     }); 
-    //     fireEvent.click(btnRegistrarse);
+    test('si el correo ingresado no tiene un campo valido, debe mostrar un mensaje de error, segunda prueba', async() => {
+        fireEvent.blur(screen.getByLabelText(/correo/i));
+        await waitFor(() => {
+            fireEvent.change(screen.getByLabelText(/correo/i),{ target: { value: 'luis.com' }});
+        }); 
+        fireEvent.click(screen.getByRole('button', {name: /registrar/i}));
 
-    //     await waitFor(() => {
-    //         expect(getByTestId("errorCorreo")).not.toBe(null);
-    //         expect(getByTestId("errorCorreo")).toHaveTextContent("El correo no tiene un formato valido.");
-    //     });
-    // });
+        await waitFor(() => {
+            expect(screen.getByTestId("errorCorreo")).not.toBe(null);
+            expect(screen.getByTestId("errorCorreo")).toHaveTextContent("El correo no tiene un formato valido.");
+        });
+    });
 
-    // test('si el correo ingresado no tiene un campo valido, debe mostrar un mensaje de error, tercera prueba', async() => {
-    //     const { getByTestId } = renderFormularioConFormik;
-    //     fireEvent.blur(inputCorreo);
-    //     await waitFor(() => {
-    //         fireEvent.change(inputCorreo,{ target: { value: 'luis@.com.co' }});
-    //     }); 
-    //     fireEvent.click(btnRegistrarse);
+    test('si el correo ingresado no tiene un campo valido, debe mostrar un mensaje de error, tercera prueba', async() => {
+        fireEvent.blur(screen.getByLabelText(/correo/i));
+        await waitFor(() => {
+            fireEvent.change(screen.getByLabelText(/correo/i),{ target: { value: 'luis@.com.co' }});
+        }); 
+        fireEvent.click(screen.getByRole('button', {name: /registrar/i}));
 
-    //     await waitFor(() => {
-    //         expect(getByTestId("errorCorreo")).not.toBe(null);
-    //         expect(getByTestId("errorCorreo")).toHaveTextContent("El correo no tiene un formato valido.");
-    //     });
-    // });
+        await waitFor(() => {
+            expect(screen.getByTestId("errorCorreo")).not.toBe(null);
+            expect(screen.getByTestId("errorCorreo")).toHaveTextContent("El correo no tiene un formato valido.");
+        });
+    });
     
-    // test('si el correo ingresado no tiene un campo valido, debe mostrar un mensaje de error, cuarta prueba', async() => {
-    //     const { getByTestId } = renderFormularioConFormik;
-    //     fireEvent.blur(inputCorreo);
-    //     await waitFor(() => {
-    //         fireEvent.change(inputCorreo,{ target: { value: '@hotm.com' }});
-    //     }); 
-    //     fireEvent.click(btnRegistrarse);
+    test('si el correo ingresado no tiene un campo valido, debe mostrar un mensaje de error, cuarta prueba', async() => {
+        fireEvent.blur(screen.getByLabelText(/correo/i));
+        await waitFor(() => {
+            fireEvent.change(screen.getByLabelText(/correo/i),{ target: { value: '@hotm.com' }});
+        }); 
+        fireEvent.click(screen.getByRole('button', {name: /registrar/i}));
 
-    //     await waitFor(() => {
-    //         expect(getByTestId("errorCorreo")).not.toBe(null);
-    //         expect(getByTestId("errorCorreo")).toHaveTextContent("El correo no tiene un formato valido.");
-    //     });
-    // });  
+        await waitFor(() => {
+            expect(screen.getByTestId("errorCorreo")).not.toBe(null);
+            expect(screen.getByTestId("errorCorreo")).toHaveTextContent("El correo no tiene un formato valido.");
+        });
+    });  
 });
+
+const resultadoEdad = (edades: number): IEdad => {
+    const resultadoCalcularEdad: IEdad = { edad: edades, error: ''}; 
+    return resultadoCalcularEdad;
+};
+
+const clickBotonRegistrar = () => {
+    return  fireEvent.click(screen.getByRole('button', {name: /registrar/i}));
+}
