@@ -79,7 +79,7 @@ describe('Debe mostrar un formulario', () => {
 
     test('debe tener un boton de registro y si el registro fue exitoso mostrar un mensaje de saludo', async() => {                   
         concatenarNombreMock.mockReturnValue('Andres Dario Otalvaro Sanchez');
-        calcularEdadMock.mockReturnValue(resultadoEdad(32));
+        calcularEdadMock.mockReturnValue(construirIEdadSinError(32));
         await waitFor(()=>{
             fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombreUno.primerNombre }});
             fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombreUno.segundoNombre }});
@@ -90,7 +90,7 @@ describe('Debe mostrar un formulario', () => {
             fireEvent.change(screen.getByLabelText(/fecha de nacimiento/i), { target: { value: '01/20/1988'} });
         }); 
          
-        clickBotonRegistrar();
+        fireEvent.click(screen.getByRole('button', {name: /registrar/i}));
        
         await waitFor(() => {      
             expect(concatenarNombreMock).toHaveBeenCalledWith(nombreUno);
@@ -101,7 +101,7 @@ describe('Debe mostrar un formulario', () => {
 
     test('debe tener un boton de registro y si el registro fue exitoso mostrar un mensaje de saludo,(segunda prueba)', async() => {              
         concatenarNombreMock.mockReturnValue('Carlos Mario Quintero Pereira');
-        calcularEdadMock.mockReturnValue(resultadoEdad(20));
+        calcularEdadMock.mockReturnValue(construirIEdadSinError(20));
         await waitFor(()=>{
             fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombreDos.primerNombre }});
             fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombreDos.segundoNombre }});
@@ -123,7 +123,7 @@ describe('Debe mostrar un formulario', () => {
 
     test('debe tener un boton de registro y si el registro fue exitoso mostrar un mensaje de saludo,(tercera prueba)', async() => {            
         concatenarNombreMock.mockReturnValue('Maria Palito Aquiles Bailo');
-        calcularEdadMock.mockReturnValue(resultadoEdad(40));
+        calcularEdadMock.mockReturnValue(construirIEdadSinError(40));
         await waitFor(()=>{
             fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombreTres.primerNombre }});
             fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombreTres.segundoNombre }});
@@ -145,7 +145,7 @@ describe('Debe mostrar un formulario', () => {
 
     test("debe sacar otra alerta, con un mensaje que contenga la ip del cliente, cuando de click en el boton Aceptar del mensaje de saludo", async () => {     
         concatenarNombreMock.mockReturnValue('Maria Palito Aquiles Bailo');
-        calcularEdadMock.mockReturnValue(resultadoEdad(40));
+        calcularEdadMock.mockReturnValue(construirIEdadSinError(40));
         await waitFor(()=>{
             fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombreTres.primerNombre }});
             fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombreTres.segundoNombre }});
@@ -174,7 +174,7 @@ describe('Debe mostrar un formulario', () => {
 
     test("cuando no de click en el boton Aceptar del mensaje de saludo, no debe sacar la alerta, con la ip del cliente", async () => {    
         concatenarNombreMock.mockReturnValue('Maria Palito Aquiles Bailo');
-        calcularEdadMock.mockReturnValue(resultadoEdad(40));
+        calcularEdadMock.mockReturnValue(construirIEdadSinError(40));
         await waitFor(()=>{
             fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombreTres.primerNombre }});
             fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombreTres.segundoNombre }});
@@ -213,7 +213,7 @@ describe('Debe mostrar un formulario', () => {
             expect(screen.getByTestId("errorCorreo")).not.toBe(null);
             expect(screen.getByTestId("errorCorreo")).toHaveTextContent("Por favor ingrese el correo.");
             expect(screen.getByTestId("errorTelefono")).not.toBe(null);
-            expect(screen.getByTestId("errorTelefono")).toHaveTextContent("Por favor un ingrese numero de telefono.");
+            expect(screen.getByTestId("errorTelefono")).toHaveTextContent("Por favor ingrese un numero de telefono.");
         });
     });
 
@@ -304,11 +304,6 @@ describe('Debe mostrar un formulario', () => {
     });  
 });
 
-const resultadoEdad = (edades: number): IEdad => {
-    const resultadoCalcularEdad: IEdad = { edad: edades, error: ''}; 
-    return resultadoCalcularEdad;
+const construirIEdadSinError = (edad: number): IEdad => {
+    return { edad: edad, error: '' };
 };
-
-const clickBotonRegistrar = () => {
-    return  fireEvent.click(screen.getByRole('button', {name: /registrar/i}));
-}
