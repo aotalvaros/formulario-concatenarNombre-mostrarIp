@@ -1,7 +1,7 @@
 import { calcularEdad } from "../domain/calcularEdad";
 import { concatenarNombre } from "../domain/concatenarNombre";
 import { Button, Col, Container, Row } from "react-bootstrap";
-import { Field, Formik, Form, ErrorMessage, FormikState } from "formik";
+import { Field, Formik, Form, ErrorMessage } from "formik";
 import { FormDatePicker } from "./utils/custom-formik/FormikDatePicker";
 import { IEdad } from "../interface/IEdad";
 import { INombre } from "../interface/INombre";
@@ -41,20 +41,26 @@ export const FormularioConFormik = () => {
         allowEscapeKey: false,
         allowEnterKey: false,
       }).then((result: SweetAlertResult) => {
+        if (result.isConfirmed) {
           obtenerIp().then((ip) => { 
-              if (ip === 'Error de conexion') {
-                Swal.fire({ title: ip, icon: "error", allowOutsideClick: false, allowEscapeKey: false, allowEnterKey: false });
-              } else {
-                Swal.fire({ title: `Tu direccion ip es : ${ip}`, icon: "success", allowOutsideClick: false, allowEscapeKey: false, allowEnterKey: false,})
-                  .then((result: SweetAlertResult) => { 
-                    resetForm();
-                  }
-                );
-              }
-            }          
-          );
-        }     
-      );
+            Swal.fire({ 
+              title: `Tu direccion ip es : ${ip}`, 
+              icon: "success", 
+              allowOutsideClick: false, 
+              allowEscapeKey: false, 
+              allowEnterKey: false
+            });
+          }).catch((error) => {
+            Swal.fire({ 
+              title: error, 
+              icon: "error", 
+              allowOutsideClick: false, 
+              allowEscapeKey: false, 
+              allowEnterKey: false
+            });
+          }).finally(() => resetForm());         
+        }
+      });
     }
   };
 
@@ -89,10 +95,14 @@ export const FormularioConFormik = () => {
             .email("El correo no tiene un formato valido.")
             .required("Por favor ingrese el correo."),
           inputFechaNacimiento: Yup.date()
-            .required("Por favor ingrese una fecha.")
+            .required("Por favor ingrese una fecha de nacimiento.")
+            .nullable()
+            .typeError('Fecha invalida')
             .max(new Date(), "Debes ingresar una fecha de nacimiento valida"),
           inputTelefono: Yup.number()
-            .required("Por favor un ingrese numero de telefono.")
+            .required("Por favor ingrese un numero de telefono.")
+            .positive("Numero de telefono invalido")
+            .integer("Numero de telefono invalido")
         })}
       >
         {({ handleSubmit, errors, touched }: any) => (
@@ -108,8 +118,8 @@ export const FormularioConFormik = () => {
                 src={logoGobanUnidos}
               />
               <div className="inputs-container">
-                <Row className="col-12 col-sm-6 col-md-12">
-                  <Col xs="12" lg="6">
+                <Row className="row col-12 col-sm-6  col-md-12">
+                  <Col className="col" xs="12" lg="6" >
                     <Field name="inputPrimerNombre">
                       {({ field }: any) => (
                         <TextField
@@ -132,7 +142,7 @@ export const FormularioConFormik = () => {
                     />
                   </Col>
 
-                  <Col xs="12" lg="6">
+                  <Col className="col" xs="12" lg="6">
                     <Field name="inputSegundoNombre">
                       {({ field }: any) => (
                         <TextField
@@ -146,8 +156,8 @@ export const FormularioConFormik = () => {
                   </Col>
                 </Row>
 
-                <Row className="col-12 col-sm-12 col-md-12">
-                  <Col xs="12" lg="6">
+                <Row className="row col-12 col-sm-6 col-md-12">
+                  <Col className="col" xs="12" lg="6">
                     <Field name="inputPrimerApellido">
                       {({ field }: any) => (
                         <TextField
@@ -169,7 +179,7 @@ export const FormularioConFormik = () => {
                       component="span"
                     />
                   </Col>
-                  <Col xs="12" lg="6">
+                  <Col className="col" xs="12" lg="6">
                     <Field name="inputSegundoApellido">
                       {({ field }: any) => (
                         <TextField
@@ -183,8 +193,8 @@ export const FormularioConFormik = () => {
                   </Col>
                 </Row>
 
-                <Row className="col-12 col-sm-12 col-md-12">
-                  <Col xs="12" lg="6" >
+                <Row className="col-12 col-sm-6 col-md-12">
+                  <Col className="col" xs="12" lg="6" >
                     <Field name="inputCorreo">
                       {({ field }: any) => (
                         <TextField
@@ -204,11 +214,12 @@ export const FormularioConFormik = () => {
                     />
                   </Col>
 
-                  <Col xs="12" lg="6">
+                  <Col className="col" xs="12" lg="6">
                     <Field name="inputTelefono">
                       {({ field }: any) => (
                         <TextField
                           {...field}
+                          inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                           type="number"
                           label="Telefono"
                           id="inputTelefono"
@@ -225,7 +236,7 @@ export const FormularioConFormik = () => {
                   </Col>
                 </Row>
                 
-                <Row lg={12} className="date-picker col-12 col-sm-6 col-md-12">               
+                <Row className="date-picker col-12 col-sm-12 col-md-12">               
                     <Field                   
                       name="inputFechaNacimiento"
                       id="inputFechaNacimiento"
