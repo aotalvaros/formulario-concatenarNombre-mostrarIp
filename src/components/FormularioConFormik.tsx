@@ -106,23 +106,23 @@ export const FormularioConFormik = () => {
         })}
       >
         {({ handleSubmit, errors, touched }: any) => (
-          <Container className="abs-center" fluid="sm">
+          <Container className="abs-center" fluid >
             <Form
               noValidate
               onSubmit={handleSubmit}
               className="card card-container"
             >
               <img
-                className="img-serponsive logo-img"
                 alt=""
                 src={logoGobanUnidos}
               />
               <div className="inputs-container">
-                <Row className="row col-12 col-sm-6  col-md-12">
-                  <Col className="col" xs="12" lg="6" >
+                <Row className="row col-12" sm="2" xs="1" >
+                  <Col className="columna">
                     <Field name="inputPrimerNombre">
                       {({ field }: any) => (
                         <TextField
+                          className="col-12 col-xs-12"                       
                           {...field}
                           type="text"
                           id="inputPrimerNombre"
@@ -142,10 +142,11 @@ export const FormularioConFormik = () => {
                     />
                   </Col>
 
-                  <Col className="col" xs="12" lg="6">
+                  <Col className="columna">
                     <Field name="inputSegundoNombre">
                       {({ field }: any) => (
                         <TextField
+                          className="col-12 col-xs-12" 
                           {...field}
                           type="text"
                           id="inputSegundoNombre"
@@ -156,11 +157,12 @@ export const FormularioConFormik = () => {
                   </Col>
                 </Row>
 
-                <Row className="row col-12 col-sm-6 col-md-12">
-                  <Col className="col" xs="12" lg="6">
+                <Row className="row col-12" sm="2" xs="1">
+                  <Col className="columna">
                     <Field name="inputPrimerApellido">
                       {({ field }: any) => (
                         <TextField
+                          className="col-12 col-xs-12"
                           {...field}
                           type="text"
                           label="Primer Apellido"
@@ -179,10 +181,12 @@ export const FormularioConFormik = () => {
                       component="span"
                     />
                   </Col>
-                  <Col className="col" xs="12" lg="6">
+
+                  <Col className="columna">
                     <Field name="inputSegundoApellido">
                       {({ field }: any) => (
                         <TextField
+                          className="col-12 col-xs-12"
                           {...field}
                           type="text"
                           id="inputSegundoApellido"
@@ -193,11 +197,12 @@ export const FormularioConFormik = () => {
                   </Col>
                 </Row>
 
-                <Row className="col-12 col-sm-6 col-md-12">
-                  <Col className="col" xs="12" lg="6" >
+                <Row className="row col-12" sm="2" xs="1">
+                  <Col className="columna">
                     <Field name="inputCorreo">
                       {({ field }: any) => (
                         <TextField
+                          className="col-12 col-xs-12"
                           {...field}
                           type="text"
                           label="Correo"
@@ -214,10 +219,11 @@ export const FormularioConFormik = () => {
                     />
                   </Col>
 
-                  <Col className="col" xs="12" lg="6">
+                  <Col className="columna">
                     <Field name="inputTelefono">
                       {({ field }: any) => (
                         <TextField
+                          className="col-12 col-xs-12"
                           {...field}
                           inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                           type="number"
@@ -236,14 +242,18 @@ export const FormularioConFormik = () => {
                   </Col>
                 </Row>
                 
-                <Row className="date-picker col-12 col-sm-12 col-md-12">               
-                    <Field                   
+                <Row className="row col-12" sm="1" xs="1">
+                  <Col className="columna"> 
+                    <Field
+                      className="col-12 col-xs-12"                   
                       name="inputFechaNacimiento"
                       id="inputFechaNacimiento"
                       component={FormDatePicker}
                       label="Fecha de Nacimiento"
                       format="MM/dd/yyyy"
-                      maxDate={new Date()}                  
+                      maxDate={new Date()} 
+                      invalidDateMessage=""
+                      maxDateMessage=""                  
                     />                                                      
                     <ErrorMessage
                       className="error-message"
@@ -251,10 +261,11 @@ export const FormularioConFormik = () => {
                       name="inputFechaNacimiento"
                       component="span"
                     />
+                  </Col>               
                 </Row>
               </div>
                               
-              <Button type="submit" className="text-center mb-2 btn-saludar">
+              <Button type="submit" className="text-center  btn-saludar">
                 Registrar
               </Button>
             </Form>
