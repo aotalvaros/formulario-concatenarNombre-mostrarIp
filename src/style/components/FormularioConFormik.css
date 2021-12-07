@@ -1,14 +1,19 @@
 .btn-saludar{
     margin-top: 30px;
+    margin: 10px;
 }
 
 .date-picker{
     padding: 10px;
+    padding-right: 0px;
 }
 
 img {
-    display: block;
+    max-height: 90px;
+    max-width: 220px;
     margin: auto;
+    padding: auto;
+    display: block;
     margin-bottom: 10px;
 }
 
@@ -24,29 +29,34 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: auto;
+    padding: auto;
     min-height: 100vh;
 }
   
 .card-container.card {
     max-width: 550px;
-    padding: 40px 40px;
+    padding: 20px 20px;
     border: 2px solid rgba(153, 163, 164);
-}
-  
-.logo-img {
-    max-height: 90px;
-    width: auto;
-    height: auto;
 }
 
 .error-message {
     color: rgb(221, 88, 88);
-}
-  
-.has-error {
-    border: 1px solid red;
+    font-size: small;
 }
 
 .inputs-container{
-    margin-left: 20px;
+    margin-left: 10px;   
 }
+
+.row{
+    padding-bottom: 5px;
+    margin-right: 0px;
+}
+
+.columna{
+    padding-bottom: 5px;
+    padding-right: 0px;
+}
+
+
