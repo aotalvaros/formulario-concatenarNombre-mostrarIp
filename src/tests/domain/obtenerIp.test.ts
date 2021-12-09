@@ -1,41 +1,49 @@
 import { obtenerIp } from '../../domain/obtenerIp';
-import { mockFunction } from '../../helpers/JestHelpers';
+import  axios, { AxiosError, AxiosResponse, AxiosStatic } from 'axios'
 
-jest.mock('../../domain/obtenerIp');
+jest.mock('axios');
 
 describe('Obtener IP', () => {
-
-    let respuesta: any;
-    const obtenerIpMock: jest.MockedFunction<() => Promise<any>> = mockFunction(obtenerIp);
-
-    test('debe devolver la direccion ip', async() => {     
-        respuesta = '10.0.0.0'
-        obtenerIpMock.mockResolvedValue(respuesta);
-
-       await obtenerIp().then(data => expect(data).toEqual('10.0.0.0'));
-    });
-
-    test('debe devolver la direccion ip, segunda prueba', async() => {     
-        respuesta = '170.0.80.10'
-        obtenerIpMock.mockResolvedValue(respuesta);
-
-       await obtenerIp().then(data => expect(data).toEqual('170.0.80.10'));
-    });
-
-    test('debe devolver la direccion ip, tercera prueba', async() => {     
-        respuesta = '181.71.45.27'
-        obtenerIpMock.mockResolvedValue(respuesta);
-
-       await obtenerIp().then(data => expect(data).toEqual('181.71.45.27'));
+    let mockedAxios: jest.Mocked<AxiosStatic>
+    
+    beforeEach(() => {
+        mockedAxios = axios as jest.Mocked<typeof axios>;
+        jest.resetAllMocks();     
     });
     
+    test('debe devolver la direccion ip', async() => {    
+        const mockedResponse: AxiosResponse = {
+            config: {},
+            data: {
+                ip: "10.0.0.0"
+            },
+            headers: {},
+            status: 200,
+            statusText: 'OK'
+        }
+        mockedAxios.get.mockResolvedValue(mockedResponse);
+        
+        await obtenerIp().then(ip => {
+            expect(ip).toEqual("10.0.0.0");
+            expect(mockedAxios.get).toHaveBeenCalledWith('https://api.ipify.org/?format=json');
+        });
+
+    });
+
     test('debe devolver un error', async() => {
-        respuesta = 'Error de conexion';
-        obtenerIpMock.mockResolvedValue(respuesta);
+        const responseError: AxiosError = {
+            config: {},
+            isAxiosError: false,
+            name: "Error",
+            message: "Network Error",
+            toJSON: jest.fn()
+        }
+        mockedAxios.get.mockRejectedValue(responseError)
     
        await obtenerIp().catch(error => {
             expect(error).toBe('Error de conexion');
+            expect(mockedAxios.get).toHaveBeenCalledWith('https://api.ipify.org/?format=json');
         });
     });
-
+   
 });
