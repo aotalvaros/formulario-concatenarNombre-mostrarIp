@@ -1,7 +1,7 @@
 import { KeyboardDatePicker } from "@material-ui/pickers";
 
 export const FormDatePicker = (props: any) => {
-  const {field, form} = props;
+  const { field, form } = props;
   
   return(      
     <KeyboardDatePicker
