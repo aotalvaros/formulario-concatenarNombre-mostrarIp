@@ -25,13 +25,12 @@ img {
     border: 2px solid palevioletred;
     border-radius: 3px;
 }
-.abs-center {
+.container-form {
     display: flex;
     align-items: center;
     justify-content: center;
     margin: auto;
-    padding: auto;
-    min-height: 100vh;
+    margin-top: 80px;
 }
   
 .card-container.card {
@@ -45,16 +44,16 @@ img {
     font-size: small;
 }
 
-.inputs-container{
+.inputs-container {
     margin-left: 10px;   
 }
 
-.row{
+.row {
     padding-bottom: 5px;
     margin-right: 0px;
 }
 
-.columna{
+.columna {
     padding-bottom: 5px;
     padding-right: 0px;
 }
