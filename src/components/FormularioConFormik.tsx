@@ -97,7 +97,7 @@ export const FormularioConFormik = () => {
           inputFechaNacimiento: Yup.date()
             .required("Por favor ingrese una fecha de nacimiento.")
             .nullable()
-            .typeError('Fecha invalida')
+            .typeError('Debes ingresar una fecha valida')
             .max(new Date(), "Debes ingresar una fecha de nacimiento valida"),
           inputTelefono: Yup.number()
             .required("Por favor ingrese un numero de telefono.")
@@ -106,7 +106,7 @@ export const FormularioConFormik = () => {
         })}
       >
         {({ handleSubmit, errors, touched }: any) => (
-          <Container className="abs-center" fluid >
+          <Container className="container-form" fluid >
             <Form
               noValidate
               onSubmit={handleSubmit}
@@ -248,12 +248,12 @@ export const FormularioConFormik = () => {
                       className="col-12 col-xs-12"                   
                       name="inputFechaNacimiento"
                       id="inputFechaNacimiento"
-                      component={FormDatePicker}
+                      component={ FormDatePicker }
                       label="Fecha de Nacimiento"
                       format="MM/dd/yyyy"
-                      maxDate={new Date()} 
-                      invalidDateMessage=""
-                      maxDateMessage=""                  
+                      maxDate={ new Date() } 
+                      invalidDateMessage={ false }
+                      maxDateMessage={ false }                  
                     />                                                      
                     <ErrorMessage
                       className="error-message"
