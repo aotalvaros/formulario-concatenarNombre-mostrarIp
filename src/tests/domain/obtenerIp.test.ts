@@ -11,7 +11,7 @@ describe('Obtener IP', () => {
         jest.resetAllMocks();     
     });
     
-    test('debe devolver la direccion ip', async() => {    
+    test('debe devolver la direccion ip', (done) => {    
         const mockedResponse: AxiosResponse = {
             config: {},
             data: {
@@ -23,14 +23,55 @@ describe('Obtener IP', () => {
         }
         mockedAxios.get.mockResolvedValue(mockedResponse);
         
-        await obtenerIp().then(ip => {
+        obtenerIp().then(ip => {
             expect(ip).toEqual("10.0.0.0");
             expect(mockedAxios.get).toHaveBeenCalledWith('https://api.ipify.org/?format=json');
+            done();
         });
 
     });
 
-    test('debe devolver un error', async() => {
+    test('debe devolver la direccion ip, segunda prueba', (done) => {    
+        const mockedResponse: AxiosResponse = {
+            config: {},
+            data: {
+                ip: "107.19.24.30"
+            },
+            headers: {},
+            status: 200,
+            statusText: 'OK'
+        }
+        mockedAxios.get.mockResolvedValue(mockedResponse);
+        
+        obtenerIp().then(ip => {
+            expect(ip).toEqual("107.19.24.30");
+            expect(mockedAxios.get).toHaveBeenCalledWith('https://api.ipify.org/?format=json');
+            done();
+        });
+
+    });
+
+    test('debe devolver la direccion ip, tercera prueba', (done) => {    
+        const mockedResponse: AxiosResponse = {
+            config: {},
+            data: {
+                ip: "200.10.20.20"
+            },
+            headers: {},
+            status: 200,
+            statusText: 'OK'
+        }
+        mockedAxios.get.mockResolvedValue(mockedResponse);
+        
+        obtenerIp().then(ip => {
+            expect(ip).toEqual("200.10.20.20");
+            expect(mockedAxios.get).toHaveBeenCalledWith('https://api.ipify.org/?format=json');
+            done();
+        });
+
+    });
+
+    test('debe devolver un error', (done) => {
         const responseError: AxiosError = {
             config: {},
             isAxiosError: false,
@@ -40,9 +81,10 @@ describe('Obtener IP', () => {
         }
         mockedAxios.get.mockRejectedValue(responseError)
     
-       await obtenerIp().catch(error => {
+        obtenerIp().catch(error => {
             expect(error).toBe('Error de conexion');
             expect(mockedAxios.get).toHaveBeenCalledWith('https://api.ipify.org/?format=json');
+            done();
         });
     });
    
