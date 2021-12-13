@@ -1,19 +1,15 @@
-import { calcularEdad } from "../domain/calcularEdad";
-import { concatenarNombre } from "../domain/concatenarNombre";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { Field, Formik, Form, ErrorMessage } from "formik";
 import { FormDatePicker } from "./utils/custom-formik/FormikDatePicker";
-import { IEdad } from "../interface/IEdad";
 import { INombre } from "../interface/INombre";
-import { obtenerIp } from "../domain/obtenerIp";
 import * as Yup from "yup";
 import React from "react";
-import Swal, { SweetAlertResult } from "sweetalert2";
 import logoGobanUnidos from "../image/LogoInsti.png";
 import { TextField } from "@material-ui/core";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "../style/components/FormularioConFormik.css";
+import { saludar } from "./utils/mensajeDeSaludo";
 
 export const FormularioConFormik = () => {
 
@@ -25,50 +21,6 @@ export const FormularioConFormik = () => {
       segundoApellido: evento.inputSegundoApellido,
     };
     saludar(nombre, evento.inputFechaNacimiento, resetForm);
-  };
-
-  const saludar = (nombre: INombre, fechaNacimiento: Date, resetForm: any) => {
-    
-    const nombreConcatenado = concatenarNombre(nombre);
-    const { edad, error }: IEdad = calcularEdad(fechaNacimiento);
-
-    if (error) {
-      mostrarErrorDeFechaMayorActual(error);
-    } else {
-      Swal.fire({
-        title: `Hola ${nombreConcatenado}, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices ${edad} años !`,
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        allowEnterKey: false,
-      }).then((result: SweetAlertResult) => {
-        if (result.isConfirmed) {
-          obtenerIp().then((ip) => { 
-            Swal.fire({ 
-              title: `Tu direccion ip es : ${ip}`, 
-              icon: "success", 
-              allowOutsideClick: false, 
-              allowEscapeKey: false, 
-              allowEnterKey: false
-            });
-          }).catch((error) => {
-            Swal.fire({ 
-              title: error, 
-              icon: "error", 
-              allowOutsideClick: false, 
-              allowEscapeKey: false, 
-              allowEnterKey: false
-            });
-          }).finally(() => resetForm());         
-        }
-      });
-    }
-  };
-
-  const mostrarErrorDeFechaMayorActual = (error: string) => {
-    Swal.fire({
-      icon: "error",
-      title: error,
-    });
   };
 
   return (
