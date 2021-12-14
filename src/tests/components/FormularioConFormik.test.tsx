@@ -18,41 +18,22 @@ jest.mock('../../domain/obtenerIp');
 
 describe('Debe mostrar un formulario', () => {
 
-    let mensajeSaludarNombreUno: {};
+    let calcularEdadMock: jest.MockedFunction<(fechaNacimiento: Date) => IEdad>;
+    let concatenarNombreMock: jest.MockedFunction<(nombre: INombre) => string>;
+    let mensajeIp: SweetAlertOptions;
     let mensajeSaludarNombreDos: {};
     let mensajeSaludarNombreTres: {};
-    let concatenarNombreMock: jest.MockedFunction<(nombre: INombre) => string>;
-    let calcularEdadMock: jest.MockedFunction<(fechaNacimiento: Date) => IEdad>;
-    let sweetAlertMock: any;
-    let mensajeIp: SweetAlertOptions;
+    let mensajeSaludarNombreUno: {};
+    let nombreDos: INombre;
+    let nombreTres: INombre;
+    let nombreUno: INombre;
     let obtenerIpMock: any;
+    let sweetAlertMock: any;
 
     const fechaDeNacimientoUno: Date = new Date('01/20/1988');
     const fechaDeNacimientoDos: Date = new Date('01/01/2002');
     const fechaDeNacimientoTres: Date = new Date('01/01/1982');   
-
-    const nombreUno: INombre = {
-        primerNombre: 'Andres',
-        segundoNombre: 'Dario', 
-        primerApellido: 'Otalvaro',
-        segundoApellido: 'Sanchez'
-    };
-
-    const nombreDos: INombre = {
-        primerNombre: 'Carlos',
-        segundoNombre: 'Mario', 
-        primerApellido: 'Quintero',
-        segundoApellido: 'Pereira'
-    };
-
-    const nombreTres: INombre = {
-        primerNombre: 'Maria',
-        segundoNombre: 'Palito', 
-        primerApellido: 'Aquiles',
-        segundoApellido: 'Bailo'
-    };
-    
-    
+ 
     beforeEach(() => {
         render(
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -63,6 +44,30 @@ describe('Debe mostrar un formulario', () => {
         calcularEdadMock = mockFunction(calcularEdad);
         sweetAlertMock = mockFunction(Swal.fire);
 
+    });
+      
+    beforeAll(() => {
+        nombreUno = {
+            primerNombre: 'Andres',
+            segundoNombre: 'Dario', 
+            primerApellido: 'Otalvaro',
+            segundoApellido: 'Sanchez'
+        };
+        nombreDos = {
+            primerNombre: 'Carlos',
+            segundoNombre: 'Mario', 
+            primerApellido: 'Quintero',
+            segundoApellido: 'Pereira'
+        };
+        nombreTres = {
+            primerNombre: 'Maria',
+            segundoNombre: 'Palito', 
+            primerApellido: 'Aquiles',
+            segundoApellido: 'Bailo'
+        };
+
+        obtenerIpMock = mockFunction(obtenerIp);
+        
         mensajeSaludarNombreUno = {"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false,
         "title": "Hola Andres Dario Otalvaro Sanchez, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices 32 años !"};
         mensajeSaludarNombreDos={"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false,
@@ -70,25 +75,15 @@ describe('Debe mostrar un formulario', () => {
         mensajeSaludarNombreTres={"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false,
         "title": "Hola Maria Palito Aquiles Bailo, su registro fue exitoso, nos vemos en su cumpleaños. ¡Felices 40 años !"};     
         mensajeIp = {"allowEnterKey": false, "allowEscapeKey": false, "allowOutsideClick": false, "icon": "success", "title": `Tu direccion ip es : 10.0.0.0`};       
-    
-    });
-
-    beforeAll(() => {
-        obtenerIpMock = mockFunction(obtenerIp);
     });
 
     test('debe tener un boton de registro y si el registro fue exitoso mostrar un mensaje de saludo', async() => {                   
         concatenarNombreMock.mockReturnValue('Andres Dario Otalvaro Sanchez');
         calcularEdadMock.mockReturnValue(construirIEdadSinError(32));
-        await waitFor(()=>{
-            fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombreUno.primerNombre }});
-            fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombreUno.segundoNombre }});
-            fireEvent.change(screen.getByLabelText(/primer apellido/i), { target: { value: nombreUno.primerApellido }});
-            fireEvent.change(screen.getByLabelText(/segundo apellido/i), { target: { value: nombreUno.segundoApellido }});
-            fireEvent.change(screen.getByLabelText(/correo/i), { target: { value: 'andres@correo.com'}});
-            fireEvent.change(screen.getByLabelText(/telefono/i), { target: { value: '345566'}});  
-            fireEvent.change(screen.getByLabelText(/fecha de nacimiento/i), { target: { value: '01/20/1988'} });
-        }); 
+        
+        await waitFor(() => {
+            simularEventosDeLosInputs(nombreUno, 'andres@correo.com', '345566', '01/20/1988');
+        })
          
         fireEvent.click(screen.getByRole('button', {name: /registrar/i}));
        
@@ -103,13 +98,7 @@ describe('Debe mostrar un formulario', () => {
         concatenarNombreMock.mockReturnValue('Carlos Mario Quintero Pereira');
         calcularEdadMock.mockReturnValue(construirIEdadSinError(20));
         await waitFor(()=>{
-            fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombreDos.primerNombre }});
-            fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombreDos.segundoNombre }});
-            fireEvent.change(screen.getByLabelText(/primer apellido/i), { target: { value: nombreDos.primerApellido }});
-            fireEvent.change(screen.getByLabelText(/segundo apellido/i), { target: { value: nombreDos.segundoApellido }});
-            fireEvent.change(screen.getByLabelText(/correo/i), { target: { value: 'Carlos@correo.com'}}); 
-            fireEvent.change(screen.getByLabelText(/telefono/i), { target: { value: '98765'}});   
-            fireEvent.change(screen.getByLabelText(/fecha de nacimiento/i), { target: { value: '01/01/2002'} });
+            simularEventosDeLosInputs(nombreDos, 'Carlos@correo.com', '98765', '01/01/2002' )
         }); 
 
         fireEvent.click(screen.getByRole('button', {name: /registrar/i}));                   
@@ -125,13 +114,7 @@ describe('Debe mostrar un formulario', () => {
         concatenarNombreMock.mockReturnValue('Maria Palito Aquiles Bailo');
         calcularEdadMock.mockReturnValue(construirIEdadSinError(40));
         await waitFor(()=>{
-            fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombreTres.primerNombre }});
-            fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombreTres.segundoNombre }});
-            fireEvent.change(screen.getByLabelText(/primer apellido/i), { target: { value: nombreTres.primerApellido }});
-            fireEvent.change(screen.getByLabelText(/segundo apellido/i), { target: { value: nombreTres.segundoApellido }});
-            fireEvent.change(screen.getByLabelText(/correo/i), { target: { value: 'maria@hotmail.com' }}); 
-            fireEvent.change(screen.getByLabelText(/telefono/i), { target: { value: '222222'}}); 
-            fireEvent.change(screen.getByLabelText(/fecha de nacimiento/i), { target: { value: '01/01/1982'} });
+            simularEventosDeLosInputs(nombreTres, 'maria@hotmail.com', '222222', '01/01/1982' )
         }); 
 
         fireEvent.click(screen.getByRole('button', {name: /registrar/i}));                                      
@@ -147,13 +130,7 @@ describe('Debe mostrar un formulario', () => {
         concatenarNombreMock.mockReturnValue('Maria Palito Aquiles Bailo');
         calcularEdadMock.mockReturnValue(construirIEdadSinError(40));
         await waitFor(()=>{
-            fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombreTres.primerNombre }});
-            fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombreTres.segundoNombre }});
-            fireEvent.change(screen.getByLabelText(/primer apellido/i), { target: { value: nombreTres.primerApellido }});
-            fireEvent.change(screen.getByLabelText(/segundo apellido/i), { target: { value: nombreTres.segundoApellido }});
-            fireEvent.change(screen.getByLabelText(/correo/i), { target: { value: 'maria@hotmail.com' }}); 
-            fireEvent.change(screen.getByLabelText(/telefono/i), { target: { value: '222222'}}); 
-            fireEvent.change(screen.getByLabelText(/fecha de nacimiento/i), { target: { value: '01/01/1982'} });
+            simularEventosDeLosInputs(nombreTres, 'maria@hotmail.com', '222222', '01/01/1982' )
         });
 
         sweetAlertMock.mockResolvedValue({
@@ -176,13 +153,7 @@ describe('Debe mostrar un formulario', () => {
         concatenarNombreMock.mockReturnValue('Maria Palito Aquiles Bailo');
         calcularEdadMock.mockReturnValue(construirIEdadSinError(40));
         await waitFor(()=>{
-            fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombreTres.primerNombre }});
-            fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombreTres.segundoNombre }});
-            fireEvent.change(screen.getByLabelText(/primer apellido/i), { target: { value: nombreTres.primerApellido }});
-            fireEvent.change(screen.getByLabelText(/segundo apellido/i), { target: { value: nombreTres.segundoApellido }});
-            fireEvent.change(screen.getByLabelText(/correo/i), { target: { value: 'maria@hotmail.com' }}); 
-            fireEvent.change(screen.getByLabelText(/telefono/i), { target: { value: '222222'}}); 
-            fireEvent.change(screen.getByLabelText(/fecha de nacimiento/i), { target: { value: '01/01/1982'} });
+            simularEventosDeLosInputs(nombreTres, 'maria@hotmail.com', '222222', '01/01/1982')
         });
         sweetAlertMock.mockResolvedValue({
             isConfirmed: false
@@ -222,13 +193,7 @@ describe('Debe mostrar un formulario', () => {
         calcularEdadMock.mockReturnValue(resultadoCalcularEdad);
         
         await waitFor(() => {
-            fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombreDos.primerNombre }});
-            fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombreDos.segundoNombre }});
-            fireEvent.change(screen.getByLabelText(/primer apellido/i), { target: { value: nombreDos.primerApellido }});
-            fireEvent.change(screen.getByLabelText(/segundo apellido/i), { target: { value: nombreDos.segundoApellido }});
-            fireEvent.change(screen.getByLabelText(/correo/i), { target: { value: 'Carlos@correo.com'}}); 
-            fireEvent.change(screen.getByLabelText(/telefono/i), { target: { value: '98765'}});   
-            fireEvent.change(screen.getByLabelText(/fecha de nacimiento/i), { target: { value: '01/01/2002'} });
+            simularEventosDeLosInputs(nombreDos, 'Carlos@correo.com', '98765', '01/01/2002')
         }); 
     
         await waitFor(() => {
@@ -304,6 +269,16 @@ describe('Debe mostrar un formulario', () => {
     });  
 });
 
-const construirIEdadSinError = (edad: number): IEdad => {
-    return { edad: edad, error: '' };
+const construirIEdadSinError = (edad: number): IEdad => ({ edad: edad, error: '' });
+
+const simularEventosDeLosInputs = (nombre: INombre, correo: string, telefono:string, fechaNacimiento: string) => {
+    return waitFor(()=>{
+        fireEvent.change(screen.getByLabelText(/primer nombre/i), { target: { value: nombre.primerNombre }});
+        fireEvent.change(screen.getByLabelText(/segundo nombre/i), { target: { value: nombre.segundoNombre }});
+        fireEvent.change(screen.getByLabelText(/primer apellido/i), { target: { value: nombre.primerApellido }});
+        fireEvent.change(screen.getByLabelText(/segundo apellido/i), { target: { value: nombre.segundoApellido }});
+        fireEvent.change(screen.getByLabelText(/correo/i), { target: { value: correo}});
+        fireEvent.change(screen.getByLabelText(/telefono/i), { target: { value: telefono}});  
+        fireEvent.change(screen.getByLabelText(/fecha de nacimiento/i), { target: { value: fechaNacimiento} });
+    });
 };
