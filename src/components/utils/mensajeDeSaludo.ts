@@ -21,6 +21,11 @@ export const saludar = (nombre: INombre, fechaNacimiento: Date, resetForm: any) 
         allowOutsideClick: false,
         allowEscapeKey: false,
         allowEnterKey: false,
+        confirmButtonText: 'OK',
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          return obtenerIp().then().catch(error => {})
+        }
       }).then((result: SweetAlertResult) => {
         if (result.isConfirmed) {
           obtenerIp().then((ip) => { 
