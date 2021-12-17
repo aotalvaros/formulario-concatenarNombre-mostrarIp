@@ -50,6 +50,7 @@ export const FormularioConFormik = () => {
             .required("Por favor ingrese una fecha de nacimiento.")
             .nullable()
             .typeError('Debes ingresar una fecha valida')
+            .min(new Date(1753, 1, 1),'No eres tan viejo')
             .max(new Date(), "Debes ingresar una fecha de nacimiento valida"),
           inputTelefono: Yup.number()
             .required("Por favor ingrese un numero de telefono.")
@@ -205,7 +206,8 @@ export const FormularioConFormik = () => {
                       format="MM/dd/yyyy"
                       maxDate={ new Date() } 
                       invalidDateMessage={ false }
-                      maxDateMessage={ false }                  
+                      maxDateMessage={ false } 
+                      minDateMessage={ false }                 
                     />                                                      
                     <ErrorMessage
                       className="error-message"
